@@ -211,8 +211,22 @@ label.field input,label.field select,label.field textarea,.inp{background:#0d162
 .squad-item .x{background:transparent;border:0;color:var(--muted);padding:2px 6px;border-radius:6px}
 .squad-item .x:hover{color:var(--danger);background:#ef444422}
 
+/* ---------- voice ---------- */
+.voice-btn.on{border-color:#22c55e;color:#bbf7d0}
+.voice-btn.talk{box-shadow:0 0 0 2px #22c55e,0 0 14px #22c55e88}
+.voice-btn .vc{font-weight:900}
+#micBtn.muted{border-color:#ef4444}
+.vpanel{position:fixed;top:64px;right:12px;z-index:45;width:min(320px,calc(100vw - 24px));background:#0f1a31;border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.vp-head{display:flex;justify-content:space-between;align-items:center}
+.vp-list{display:flex;flex-direction:column;gap:6px;margin-top:10px;max-height:50vh;overflow:auto}
+.vp-row{display:flex;align-items:center;gap:8px;background:#0d1629;border-radius:9px;padding:7px 9px;font-size:14px}
+.vp-nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vp-dot{width:10px;height:10px;border-radius:50%;background:#334155;flex:none;transition:background .1s}
+.vp-dot.on{background:#22c55e;box-shadow:0 0 8px #22c55e}
+@media (max-width:560px){ .voice-btn .vl{display:none} .vpanel{top:100px} }
+
 /* ---------- squad management (FC-style) ---------- */
-.team-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin-bottom:6px}
+.team-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 24px 10px 2px;margin-bottom:6px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
 .tchip{flex:none;display:inline-flex;align-items:center;gap:7px;background:#0d1629;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:700;color:var(--text);white-space:nowrap}
 .tchip b{color:var(--gold)}
 .tchip.on{border-color:var(--tc,#7cc4ff);box-shadow:0 0 0 2px var(--tc,#7cc4ff) inset}
@@ -232,7 +246,7 @@ label.field input,label.field select,label.field textarea,.inp{background:#0d162
 .sh-ctl label.field select{padding:7px 8px}
 .squad-wrap{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.8fr);gap:16px;align-items:start}
 .squad-side{display:flex;flex-direction:column;gap:12px}
-.pitch-wrap{max-width:640px;width:100%;margin:0 auto}
+.pitch-wrap{max-width:min(640px,calc((100vh - 150px) * .74));min-width:min(100%,320px);width:100%;margin:0 auto}
 .pitch{position:relative;width:100%;aspect-ratio:.74;border-radius:16px;border:2px solid #3fa863;overflow:hidden;
   background:repeating-linear-gradient(0deg,#1e7a3c 0 7.14%,#1a6f36 7.14% 14.28%)}
 .pitch::before{content:"";position:absolute;inset:2.5%;border:2px solid rgba(255,255,255,.35);border-radius:4px}
@@ -266,13 +280,17 @@ label.field input,label.field select,label.field textarea,.inp{background:#0d162
 .brow .bn{display:flex;flex-direction:column;min-width:0}
 .brow .bn b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13.5px}
 .bfit{height:5px;background:#1f2b48;border-radius:5px;overflow:hidden}.bfit i{display:block;height:100%}
-.pinfo .card-wrap{width:110px}
+.pinfo .card-wrap{width:130px}
+.sq-bar{position:sticky;bottom:10px;z-index:15;margin-top:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#0f1a31;border:1px solid #7cc4ff;border-radius:12px;padding:8px 10px;box-shadow:0 8px 30px rgba(0,0,0,.45)}
+.sq-bar .nm{font-weight:800;flex:1;min-width:120px}
+.live-feed{display:flex;flex-direction:column-reverse;gap:3px;margin-top:8px;font-size:13px;max-height:180px;overflow:auto}
 .faces{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin:8px 0}
 .faces div{background:#0d1629;border-radius:8px;padding:4px 2px;text-align:center;display:flex;flex-direction:column}
 .faces span{font-size:10px;color:var(--muted);font-weight:800}.faces b{font-size:15px}
 /* league */
 .league-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .league-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.9fr);gap:14px;align-items:start}
+.league-grid > *,.league-side > *,.squad-wrap > *,.squad-side > *{min-width:0}
 .league-side{display:flex;flex-direction:column;gap:14px}
 .ltable{width:100%;border-collapse:collapse;font-size:14px}
 .ltable th,.ltable td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
@@ -318,6 +336,8 @@ button.fx:hover{border-color:#3d5490}
 }
 @media (max-width:560px){
   .slot{width:19%}
+  .pitch{aspect-ratio:.64}
+  .pitch-wrap{max-width:100%}
   .squad-head{gap:10px}
   .sh-big b{font-size:24px}
   .stat-grid{grid-template-columns:1fr}
@@ -427,6 +447,8 @@ button.fx:hover{border-color:#3d5490}
   <div class="head-right">
     <span class="stat" id="headStat"></span>
     <button class="iconbtn room-pill hidden" id="roomBtn" data-action="room" title="Online room"></button>
+    <button class="iconbtn voice-btn hidden" id="voiceBtn" data-action="voice" title="Voice chat" aria-label="Voice chat">🎙</button>
+    <button class="iconbtn hidden" id="micBtn" data-action="voice-mute" title="Mute" aria-label="Mute or unmute your microphone">🎤</button>
     <button class="iconbtn" id="soundBtn" title="Sound on/off" aria-label="Sound on/off">🔊</button>
   </div>
 </header>
@@ -560,6 +582,7 @@ button.fx:hover{border-color:#3d5490}
   </section>
 </main>
 
+<div id="voicePanel" class="vpanel hidden"></div>
 <div id="modalRoot"></div>
 <div id="toast"></div>
 
@@ -871,7 +894,7 @@ function normPos(p){
   if (["FWD","F","ST","CF","SS","LW","RW","LWF","RWF","FW","STRIKER","FORWARD","ATT","ATTACK","ATTACKER","WINGER"].includes(p)) return "FWD";
   return "MID";
 }
-function tierOf(p){ if (p.base >= 150) return "legend"; if (p.base >= 70) return "gold"; if (p.base >= 30) return "silver"; return "bronze"; }
+function tierOf(p){ const r = p.ovr || p.rating || 0; if (r >= 89) return "legend"; if (r >= 84) return "gold"; if (r >= 79) return "silver"; return "bronze"; }
 const TIER_NAMES = {legend:"Icon", gold:"Gold", silver:"Silver", bronze:"Bronze"};
 /* team colour that stays readable as text on the dark background */
 function readable(c){
@@ -1231,12 +1254,13 @@ function chemistry(xi, F){
   const ok = xi.map((p, i) => inPosition(p, F[i][0]));
   const cnt = { c: {}, n: {}, l: {} };
   xi.forEach((p, i) => { if (!ok[i]) return; const c = clubKey(p.club), n = fold(p.nationality), l = leagueOf(p.club);
-    cnt.c[c] = (cnt.c[c] || 0) + 1; if (n) cnt.n[n] = (cnt.n[n] || 0) + 1; cnt.l[l] = (cnt.l[l] || 0) + 1; });
+    if (c){ cnt.c[c] = (cnt.c[c] || 0) + 1; cnt.l[l] = (cnt.l[l] || 0) + 1; } if (n) cnt.n[n] = (cnt.n[n] || 0) + 1; });
   const step = (v, a, b, c) => v >= c ? 3 : v >= b ? 2 : v >= a ? 1 : 0;
   const per = xi.map((p, i) => {
     if (!ok[i]) return 0;
     const n = fold(p.nationality);
-    return Math.min(3, step(cnt.c[clubKey(p.club)], 2, 5, 7) + (n ? step(cnt.n[n], 2, 5, 8) : 0) + step(cnt.l[leagueOf(p.club)], 3, 5, 8));
+    const c = clubKey(p.club);
+    return Math.min(3, (c ? step(cnt.c[c], 2, 5, 7) + step(cnt.l[leagueOf(p.club)], 3, 5, 8) : 0) + (n ? step(cnt.n[n], 2, 5, 8) : 0));
   });
   return { per, total: per.reduce((a, b) => a + b, 0), ok };
 }
@@ -1245,18 +1269,19 @@ function chemistry(xi, F){
 function teamPlayers(t){ return teamSales(t).map(s => playerById(s.playerId)).filter(Boolean); }
 function fitFactor(pid){ return 1 - ENG.fitW + ENG.fitW * cond(pid).fit / 100; }
 function slotValue(p, slot){ return p ? p.ovr * fam(p, slot) * fitFactor(p.id) + cond(p.id).form * .7 : 0; }
-function bestXI(players, formation){
+const youthVal = slot => slot === "GK" ? 35 : 45;   // what an empty place is worth (a youth player)
+function bestXI(players, formation, team){
   const F = FORMATIONS[formation], slots = Array(11).fill(null), used = new Set();
   const natural = pos => players.filter(p => inPosition(p, pos)).length;
   const order = F.map((s, i) => i).sort((a, b) => (F[a][0] === "GK" ? -1 : 0) - (F[b][0] === "GK" ? -1 : 0) || natural(F[a][0]) - natural(F[b][0]) || a - b);
   const byId = players.slice().sort((a, b) => a.id < b.id ? -1 : 1);
   for (const i of order){
-    let best = null, bv = 0;
+    let best = null, bv = youthVal(F[i][0]);
     for (const p of byId){ if (used.has(p.id)) continue; const v = slotValue(p, F[i][0]); if (v > bv + 1e-9){ bv = v; best = p; } }
     if (best){ slots[i] = best.id; used.add(best.id); }
   }
   // improve: swap pairs of starters, or a starter with a sub, while it helps
-  const val = (id, i) => id ? slotValue(playerById(id), F[i][0]) : 0;
+  const val = (id, i) => id ? slotValue(playerById(id), F[i][0]) : youthVal(F[i][0]);
   for (let guard = 0, better = true; better && guard < 40; guard++){
     better = false;
     for (let i = 0; i < 11; i++) for (let j = i + 1; j < 11; j++){
@@ -1267,14 +1292,38 @@ function bestXI(players, formation){
       if (slotValue(p, F[i][0]) > val(slots[i], i) + 1e-6){ if (slots[i]) used.delete(slots[i]); slots[i] = p.id; used.add(p.id); better = true; }
     }
   }
+  if (!team) return slots;
+  // polish with the real team strength, which also counts chemistry and the line profiles
+  const strength = sl => { const e = evalTeam(team, false, { formation, slots: sl, mentality: "balanced" }); return e.att + e.mid + e.def + .5 * e.gk; };
+  let cur = strength(slots);
+  for (let pass = 0; pass < 3; pass++){
+    let better = false;
+    for (let i = 0; i < 11; i++){
+      for (let j = i + 1; j < 11; j++){
+        const t = slots.slice(); t[i] = slots[j]; t[j] = slots[i];
+        const v = strength(t); if (v > cur + 1e-6){ slots.splice(0, 11, ...t); cur = v; better = true; }
+      }
+      for (const p of byId){
+        if (slots.includes(p.id)) continue;
+        const t = slots.slice(); t[i] = p.id;
+        const v = strength(t); if (v > cur + 1e-6){ slots.splice(0, 11, ...t); cur = v; better = true; }
+      }
+    }
+    if (!better) break;
+  }
   return slots;
 }
+const autoCache = {};
 function lineupOf(t){
   const own = new Set(teamPlayers(t).map(p => p.id));
   const saved = t.lineup && FORMATIONS[t.lineup.formation] ? t.lineup : null;
   const formation = saved ? saved.formation : "4-3-3";
   const mentality = saved && MENTALITIES[saved.mentality] ? saved.mentality : "balanced";
-  if (!saved) return { formation, slots: bestXI(teamPlayers(t), formation), mentality, auto: true };
+  if (!saved){
+    const L = state.league, key = t.id + "|" + teamPlayers(t).map(p => p.id).join(",") + "|" + (L ? (L.lid || "") + L.played : "");
+    if (!autoCache[key]) autoCache[key] = bestXI(teamPlayers(t), formation, t);
+    return { formation, slots: autoCache[key].slice(), mentality, auto: true };
+  }
   const seen = new Set();
   const slots = Array.from({ length: 11 }, (_, i) => { const id = saved.slots && saved.slots[i]; return id && own.has(id) && !seen.has(id) && seen.add(id) ? id : null; });
   return { formation, slots, mentality, auto: false };
@@ -1287,7 +1336,7 @@ function matchLineup(t){
   const slots = lu.slots.slice();
   slots.forEach((id, i) => {
     if (id) return;
-    let best = null, bv = 0;
+    let best = null, bv = youthVal(F[i][0]);
     bench.forEach(p => { if (used.has(p.id)) return; const v = slotValue(p, F[i][0]); if (v > bv){ bv = v; best = p; } });
     if (best){ slots[i] = best.id; used.add(best.id); }
   });
@@ -1330,8 +1379,6 @@ function evalTeam(t, home, lineup){
   });
   const line = k => wsum[k] ? sums[k] / wsum[k] + 1.6 * (wsum[k] - LINE_BASE[k]) : 40;
   let att = line("att"), mid = line("mid"), def = line("def");
-  const ment = lu.mentality === "attacking" ? 1.5 : lu.mentality === "defensive" ? -1.5 : 0;
-  att += ment; def -= ment;
   const chemB = (ch.total - 16) * .08, mor = moraleOf(t.id), hb = home ? 1 : 0;
   att += chemB + mor + hb; mid += chemB + mor + hb; def += chemB + mor + hb * .5; gk += mor * .5;
   const real = xi.filter(Boolean);
@@ -1349,7 +1396,11 @@ function simMatch(hT, aT, id){
   const H = evalTeam(hT, true, matchLineup(hT)), A = evalTeam(aT, false, matchLineup(aT));
   const poss = clamp(.5 + (H.mid - A.mid) * ENG.possK, .3, .7);
   const qH = H.att - (.7 * A.def + .3 * A.gk), qA = A.att - (.7 * H.def + .3 * H.gk);
-  const xgH = ENG.xgBase * Math.exp(ENG.xgK * qH) * Math.pow(poss / .5, .6), xgA = ENG.xgBase * Math.exp(ENG.xgK * qA) * Math.pow((1 - poss) / .5, .6);
+  let xgH = ENG.xgBase * Math.exp(ENG.xgK * qH) * Math.pow(poss / .5, .6), xgA = ENG.xgBase * Math.exp(ENG.xgK * qA) * Math.pow((1 - poss) / .5, .6);
+  // tactics: attacking = more chances at both ends (favours the stronger side), defensive = a tight game (helps underdogs hold on)
+  const TEMPO = { defensive: [.86, .84], balanced: [1, 1], attacking: [1.15, 1.12] };
+  const mh = TEMPO[H.lu.mentality] || TEMPO.balanced, ma = TEMPO[A.lu.mentality] || TEMPO.balanced;
+  xgH = Math.min(4.5, xgH * mh[0] * ma[1]); xgA = Math.min(4.5, xgA * ma[0] * mh[1]);
   const d = xgH - xgA;
   let gh, ga;
   if (Math.abs(d) < ENG.drawGap){ gh = ga = Math.max(0, Math.round((xgH + xgA) / 2 - ENG.drawCut)); }
@@ -1357,7 +1408,7 @@ function simMatch(hT, aT, id){
     // the beaten side scores less the more it was dominated; the margin grows with the gap in chances
     const xl = Math.min(xgH, xgA), dom = Math.min(1, Math.abs(d));
     const gl = Math.max(0, Math.floor(xl * (1 - ENG.loseSupp * dom) + ENG.loseAdd));
-    const gw = gl + Math.max(1, Math.round(Math.abs(d) * ENG.marginK + ENG.winBoost));
+    const gw = gl + Math.min(5, Math.max(1, Math.round(Math.abs(d) * ENG.marginK + ENG.winBoost)));
     if (d > 0){ gh = gw; ga = gl; } else { ga = gw; gh = gl; }
   }
   const goals = [];
@@ -1372,7 +1423,7 @@ function simMatch(hT, aT, id){
       if (hashStr(id + side + "a" + k) % 5){
         cands.forEach(c => { if (c === best) return; const v = ((c.w.mid || 0) + (c.w.att || 0)) * (.6 * c.p.st[2] + .4 * c.p.st[3]) * c.x.eff / (1 + 1.3 * (atally[c.p.id] || 0)); if (v > av){ av = v; ast = c; } });
       }
-      if (!best) continue;
+      if (!best){ goals.push({ s: side, p: null, a: null, m: mins[k], og: true }); continue; }
       tally[best.p.id] = (tally[best.p.id] || 0) + 1; if (ast) atally[ast.p.id] = (atally[ast.p.id] || 0) + 1;
       goals.push({ s: side, p: best.p.id, a: ast ? ast.p.id : null, m: mins[k] });
     }
@@ -1426,7 +1477,8 @@ function makeFixtures(ids){
     const md = [];
     for (let i = 0; i < n / 2; i++){
       const a = t[i], b = t[n - 1 - i]; if (!a || !b) continue;
-      md.push((r + i) % 2 === 0 ? [a, b] : [b, a]);
+      const aHome = i === 0 ? r % 2 === 0 : i % 2 === 1;
+      md.push(aHome ? [a, b] : [b, a]);
     }
     first.push(md);
     t.splice(1, 0, t.pop());
@@ -1439,8 +1491,8 @@ function startLeague(){
   const thin = state.teams.filter(t => teamPlayers(t).length < 11);
   if (thin.length && !confirm(thin.map(t => t.name).join(", ") + " " + (thin.length > 1 ? "have" : "has") + " fewer than 11 players. Empty places will be filled by weak youth players (rating 45). Start the league anyway?")) return;
   if (state.current && !confirm("A player is still on the auction stage. Start the league anyway?")) return;
-  state.league = { status: "running", fixtures: makeFixtures(state.teams.map(t => t.id)), results: [], played: 0, cond: {}, stats: {}, season: ((state.league && state.league.season) || 0) + 1, prev: null };
-  persist(); setView("league"); toast("League started — " + state.league.fixtures.length + " matchdays");
+  state.league = { lid: rid(6), status: "running", fixtures: makeFixtures(state.teams.map(t => t.id)), results: [], played: 0, cond: {}, stats: {}, season: ((state.league && state.league.season) || 0) + 1, prev: null, reveal: null };
+  persist(); publishLeague(); setView("league"); toast("League started — " + state.league.fixtures.length + " matchdays");
 }
 function playMatchday(){
   if (!isHost()) return;
@@ -1460,7 +1512,7 @@ function playMatchday(){
       const drain = ENG.drain + Math.max(0, (p.age || 25) - 30) * .8 + (["LW","RW","LM","RM","LWB","RWB","CM"].includes(slot) ? 2 : 0) - (slot === "GK" ? 7 : 0);
       c.fit = clamp(c.fit - drain + ENG.recoverXI, ENG.fitMin, 100);
       const r = results.find(x => x.rat[p.id] != null), mr = r ? r.rat[p.id] : 6.5;
-      c.form = clamp(Math.round((c.form * .6 + (mr - 6.8) * 1.5) * 10) / 10, -3, 3);
+      c.form = clamp(Math.round((c.form * .6 + (mr - 6.6) * 1.5) * 10) / 10, -3, 3);
     } else {
       c.fit = clamp(c.fit + ENG.recoverBench, ENG.fitMin, 100);
       c.form = Math.round(c.form * .8 * 10) / 10;
@@ -1475,8 +1527,8 @@ function playMatchday(){
   L.results.push(results);
   L.played++;
   if (L.played >= L.fixtures.length) L.status = "done";
-  persist();
-  ui.reveal = { md, at: Date.now() };
+  L.reveal = { md, at: Date.now() + 1500, dur: REVEAL_MS };   // everyone watches the same minute (master's clock)
+  persist(); publishLeague([md]);
   setView("league"); window.scrollTo(0, 0);
 }
 function undoMatchday(){
@@ -1484,14 +1536,15 @@ function undoMatchday(){
   const L = state.league; if (!L || !L.played || !L.prev) return;
   if (!confirm("Undo matchday " + L.played + "? Its results will be removed.")) return;
   const p = JSON.parse(L.prev);
-  L.cond = p.cond; L.stats = p.stats; L.results.pop(); L.played--; L.status = "running"; L.prev = null; ui.reveal = null;
-  persist(); renderAll(); toast("Matchday " + (L.played + 1) + " undone");
+  L.cond = p.cond; L.stats = p.stats; L.results.pop(); L.played--; L.status = "running"; L.prev = null; L.reveal = null;
+  persist(); clearLeagueResult(L.played); publishLeague(); renderAll(); toast("Matchday " + (L.played + 1) + " undone");
 }
 function standings(){
   const L = state.league, rows = {};
-  state.teams.forEach(t => rows[t.id] = { t, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] });
+  const inLeague = L && L.fixtures ? new Set(L.fixtures.flat(2)) : null;
+  state.teams.forEach(t => { if (!inLeague || inLeague.has(t.id)) rows[t.id] = { t, p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, form: [] }; });
   (L ? L.results : []).forEach((md, mi) => md.forEach(r => {
-    if (ui.reveal && mi === ui.reveal.md && Date.now() - ui.reveal.at < REVEAL_MS) return;   // still "live"
+    if (isLive(mi)) return;   // still being played
     const h = rows[r.h], a = rows[r.a]; if (!h || !a) return;
     h.p++; a.p++; h.gf += r.gh; h.ga += r.ga; a.gf += r.ga; a.ga += r.gh;
     if (r.gh > r.ga){ h.w++; a.l++; h.pts += 3; h.form.push("W"); a.form.push("L"); }
@@ -1547,14 +1600,26 @@ function normalizeState(s){
       ? { endsAt: isFinite(+s.timer.endsAt) && +s.timer.endsAt > 0 ? +s.timer.endsAt : null, left: s.timer.left != null && isFinite(+s.timer.left) ? +s.timer.left : null } : null,
     room: s.room && /^[A-Z]{5}[0-9]$/.test(s.room.code) ? { code: s.room.code } : null,
     nextTeamNo: int(s.nextTeamNo, teams.length + 1, 1),
-    league: normalizeLeague(s.league) };
+    league: normalizeLeague(s.league, tids) };
 }
-function normalizeLeague(l){
+function normalizeLeague(l, tids){
   if (!l || typeof l !== "object") return null;
-  if (!Array.isArray(l.fixtures)) return isFinite(+l.season) ? { season: +l.season } : null;
-  const results = Array.isArray(l.results) ? l.results.filter(Array.isArray).slice(0, l.fixtures.length) : [];
-  return { status: results.length >= l.fixtures.length ? "done" : "running", fixtures: l.fixtures, results, played: results.length,
-    cond: l.cond && typeof l.cond === "object" ? l.cond : {}, stats: l.stats && typeof l.stats === "object" ? l.stats : {}, season: isFinite(+l.season) ? +l.season : 1, prev: typeof l.prev === "string" ? l.prev : null };
+  const season = isFinite(+l.season) && +l.season > 0 ? Math.round(+l.season) : 1;
+  const okTeam = id => typeof id === "string" && (!tids || tids.has(id));
+  const fixtures = Array.isArray(l.fixtures) ? l.fixtures : null;
+  if (!fixtures || !fixtures.length || !fixtures.every(md => Array.isArray(md) && md.length && md.every(x => Array.isArray(x) && x.length === 2 && okTeam(x[0]) && okTeam(x[1]) && x[0] !== x[1]))) return { season };
+  const okRes = r => r && typeof r === "object" && okTeam(r.h) && okTeam(r.a) && Number.isInteger(r.gh) && Number.isInteger(r.ga) && Array.isArray(r.goals) &&
+    r.rat && typeof r.rat === "object" && r.H && r.A && Array.isArray(r.H.xi) && Array.isArray(r.A.xi);
+  const results = [];
+  for (const md of (Array.isArray(l.results) ? l.results : []).slice(0, fixtures.length)){ if (!Array.isArray(md) || !md.length || !md.every(okRes)) break; results.push(md); }
+  const cond = {};
+  if (l.cond && typeof l.cond === "object") Object.keys(l.cond).forEach(id => { const c = l.cond[id]; if (c && typeof c === "object") cond[id] = { fit: clamp(+c.fit || 100, 0, 100), form: clamp(+c.form || 0, -3, 3) }; });
+  const stats = {};
+  if (l.stats && typeof l.stats === "object") Object.keys(l.stats).forEach(id => { const x = l.stats[id]; if (x && typeof x === "object") stats[id] = { apps: +x.apps || 0, g: +x.g || 0, a: +x.a || 0, rs: +x.rs || 0, motm: +x.motm || 0 }; });
+  const truncated = results.length !== (Array.isArray(l.results) ? l.results.length : 0);
+  const rv = l.reveal && typeof l.reveal === "object" && Number.isInteger(l.reveal.md) && isFinite(+l.reveal.at) ? { md: l.reveal.md, at: +l.reveal.at, dur: +l.reveal.dur || 45000 } : null;
+  return { lid: typeof l.lid === "string" ? l.lid : rid(6), status: results.length >= fixtures.length ? "done" : "running", fixtures, results, played: results.length, cond, stats, season,
+    prev: !truncated && typeof l.prev === "string" ? l.prev : null, reveal: rv };
 }
 let state = normalizeState(load(KEY_STATE, null));
 /* tidy up a typed or pasted room code: "kxpta0", "KXPTA-O", or a whole invite link */
@@ -1571,7 +1636,7 @@ if (role === "player") state = null;      // a friend's device only mirrors what
 let prefs = Object.assign({ sound: true, view: "auction" }, load(KEY_PREFS, {}));
 let setupPlayers = null;     // players chosen on the setup screen (null = built-in)
 let undoStack = [];
-let ui = { nextBid: null, renderedCard: null, flipId: null, pending: null, spectate: false, picking: false, claiming: null, roomOpen: false, teamView: null, sqSel: null, reveal: null, pendingLineup: null };
+let ui = { nextBid: null, renderedCard: null, flipId: null, pending: null, spectate: false, picking: false, claiming: null, roomOpen: false, teamView: null, sqSel: null, pendingLineup: null, lastView: null };
 let pIndex = {};
 function isHost(){ return role === "host"; }
 
@@ -1875,7 +1940,7 @@ function loadMqtt(){
   return mqttLoading;
 }
 function setNetStatus(s){
-  NET.status = s; renderRoomUI();
+  NET.status = s; renderRoomUI(); renderVoice();
   if (role === "player"){ if (prefs.view === "join") renderJoin(); else if (state && state.current && prefs.view === "auction") renderBidPanel(); }
 }
 async function netConnect(code, onReady, will){
@@ -1890,7 +1955,7 @@ async function netConnect(code, onReady, will){
   NET.client = client;
   clearTimeout(NET.failT);
   NET.failT = setTimeout(() => { if (NET.client === client && NET.status !== "online") setNetStatus("error"); }, 12000);
-  client.on("connect", () => { if (NET.client !== client) return; setNetStatus("online"); onReady(client); });
+  client.on("connect", () => { if (NET.client !== client) return; setNetStatus("online"); onReady(client); if (VOICE.on) voiceSubscribe(); });
   client.on("reconnect", () => { if (NET.client === client && NET.status !== "error") setNetStatus("connecting"); });
   client.on("offline", () => { if (NET.client === client){ setNetStatus("connecting"); onNetLost(); } });
   client.on("close", () => { if (NET.client === client && NET.status === "online"){ setNetStatus("connecting"); onNetLost(); } });
@@ -1901,6 +1966,7 @@ async function netConnect(code, onReady, will){
     let msg; try{ msg = JSON.parse(raw); }catch(e){ return; }
     if (!msg || typeof msg !== "object") return;
     const sub = topic.slice(NET.topic.length);
+    if (sub.startsWith("vc/")){ voiceOnMessage(sub, msg); return; }
     if (isHost()) hostOnMessage(sub, msg); else playerOnMessage(sub, msg, !!(packet && packet.retain), raw);
   });
 }
@@ -1956,12 +2022,26 @@ function netPublishState(){
   clearTimeout(NET.pubT);
   NET.pubT = setTimeout(() => pub("state", publicState(), true), 30);
 }
+/* the league goes on its own topics: "lg" (table data, fitness, live clock) + one "lgr/<n>" per played matchday */
+function leagueMeta(){
+  const L = state && state.league;
+  if (!L || !L.fixtures) return { none: true, season: L ? L.season : 0 };
+  return { lid: L.lid, season: L.season, status: L.status, fixtures: L.fixtures, played: L.played, cond: L.cond, stats: L.stats, reveal: L.reveal, canUndo: !!L.prev };
+}
+function publishLeague(mds){
+  if (!isHost() || !NET.client || !state) return;
+  const L = state.league, code = state.room.code;
+  if (L && L.results) (mds || []).forEach(i => { if (L.results[i]) pub("lgr/" + i, { code, lid: L.lid, md: i, res: L.results[i] }, true); });
+  pub("lg", Object.assign({ code, sid: HOST_SID, hostNow: Date.now() }, leagueMeta()), true);
+}
+function clearLeagueResult(i){ if (isHost() && NET.client && NET.status === "online"){ try{ NET.client.publish(NET.topic + "lgr/" + i, "", { qos: 1, retain: true }); }catch(e){} } }
 function publishAll(){
   if (!isHost() || !state) return;
   NET.lastFull = Date.now();
   pub("players", { code: state.room.code, list: state.players.map(p => [p.id, p.name, p.position, p.nationality, p.club, p.age, p.rating, p.base, p.photo, p.ovr, p.pos, p.st]) }, true);
   publishPhotos();
   pub("state", publicState(), true);
+  publishLeague(state.league && state.league.results ? state.league.results.map((_, i) => i) : []);
 }
 function publishPhotos(){
   if (!isHost() || !state) return;
@@ -2050,7 +2130,7 @@ let mirrorPlayers = null;
 function playerStartNet(){
   clearTimeout(NET.findT); NET.notFound = false;
   netConnect(joinCode, client => {
-    ["state", "players", "photos", "hb", "presence", "to/" + me.id].forEach(s => client.subscribe(NET.topic + s, { qos: 1 }));
+    ["state", "players", "photos", "hb", "presence", "lg", "lgr/+", "to/" + me.id].forEach(s => client.subscribe(NET.topic + s, { qos: 1 }));
     sendCmd({ type: "hello" });
     clearTimeout(NET.findT);
     NET.findT = setTimeout(() => { if (!state || !state.players.length){ NET.notFound = true; if (prefs.view === "join") renderJoin(); } }, 9000);
@@ -2059,7 +2139,26 @@ function playerStartNet(){
 function sendCmd(m){ pub("cmd", Object.assign({ pid: me.id, name: me.name || "Guest", ref: rid(6) }, m)); }
 setInterval(() => { if (role === "player" && NET.status === "online") sendCmd({ type: "ping" }); }, 10000);
 function markHostAlive(){ const was = NET.hostOnline; NET.lastHb = Date.now(); NET.hostOnline = true; if (!was){ renderRoomUI(); if (prefs.view === "join") renderJoin(); } }
+let mirrorLeague = { meta: null, res: {} };
+function assembleLeague(){
+  const m = mirrorLeague.meta;
+  if (!m || m.none) return m ? { season: m.season } : null;
+  const results = [];
+  for (let i = 0; i < m.played; i++){ const r = mirrorLeague.res[m.lid + ":" + i]; if (!r) break; results.push(r); }
+  return { lid: m.lid, season: m.season, status: m.status, fixtures: m.fixtures, played: results.length, results, cond: m.cond || {}, stats: m.stats || {}, reveal: m.reveal, prev: m.canUndo ? "1" : null };
+}
+function applyMirrorLeague(){
+  if (!state) return;
+  const before = state.league, after = assembleLeague();
+  state.league = after;
+  const r = after && after.reveal, wasLive = before && before.reveal && after && before.lid === after.lid && before.reveal.md === (r && r.md) && before.reveal.at === (r && r.at);
+  if (r && !wasLive && liveReveal() && prefs.view !== "join" && !ui.picking){ closeModal(); if (prefs.view !== "league") setView("league"); window.scrollTo(0, 0); }
+  if (prefs.view === "league") renderLeague();
+  else if (prefs.view === "teams") renderTeams();
+}
 function playerOnMessage(sub, m, retained, raw){
+  if (sub === "lg"){ if (m.code === joinCode){ mirrorLeague.meta = m; if (!retained && m.hostNow) clockOffset = m.hostNow - Date.now(); applyMirrorLeague(); } return; }
+  if (sub.startsWith("lgr/")){ if (m.code === joinCode && m.lid && Array.isArray(m.res)){ mirrorLeague.res[m.lid + ":" + m.md] = m.res; if (mirrorLeague.meta && m.md < mirrorLeague.meta.played) applyMirrorLeague(); } return; }
   if (sub === "players"){
     if (m.code !== joinCode || !Array.isArray(m.list) || raw === NET.lastPlayersRaw) return;
     NET.lastPlayersRaw = raw;
@@ -2099,8 +2198,7 @@ function playerOnMessage(sub, m, retained, raw){
       if (t && Date.now() - ui.pendingLineup.at < 4000 && JSON.stringify(t.lineup) !== ui.pendingLineup.lu) t.lineup = JSON.parse(ui.pendingLineup.lu);
       else ui.pendingLineup = null;
     }
-    const pl = prev && prev.league && prev.league.results, nl = state.league && state.league.results;
-    if (pl && nl && nl.length > pl.length){ ui.reveal = { md: nl.length - 1, at: Date.now() }; if (prefs.view !== "join" && !ui.picking){ closeModal(); setView("league"); window.scrollTo(0, 0); } }
+    state.league = prev ? prev.league : assembleLeague();
     if (!pIndex || !Object.keys(pIndex).length || (prev && prev.players !== state.players)) indexPlayers();
     // sounds & animations for what just happened
     const pc = prev && prev.current, nc = state.current;
@@ -2151,6 +2249,178 @@ setInterval(() => {   // friends: notice when the master disappears
   if (role === "player" && NET.hostOnline && Date.now() - NET.lastHb > 35000){ NET.hostOnline = false; renderRoomUI(); if (prefs.view === "join") renderJoin(); else renderBidPanel(); }
 }, 5000);
 
+/* =========================================================
+   Voice chat: audio goes straight between browsers (WebRTC);
+   the room's MQTT channel is only used so the browsers can find each other.
+   ========================================================= */
+const ICE_SERVERS = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302", "stun:stun.cloudflare.com:3478"] }];
+const VOICE = { on: false, joining: false, muted: false, stream: null, peers: {}, people: {}, hbT: null, levelT: null, actx: null, meters: {}, open: false };
+function voiceName(){ return isHost() ? "Master" + (myTeam() ? " · " + myTeam().name : "") : (me.name || "Guest") + (myTeam() ? " · " + myTeam().name : ""); }
+function voiceAvailable(){ return !!(isHost() ? state && state.room : joinCode); }
+async function voiceJoin(){
+  if (VOICE.on || VOICE.joining) return;
+  if (NET.status !== "online" || !NET.client){ toast("Voice works once you are 🟢 Live in the room", true); return; }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.RTCPeerConnection){ toast("This browser can't use the microphone here — open the game from its https link in Chrome or Safari", true); return; }
+  VOICE.joining = true; renderVoice();
+  try{ VOICE.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }, video: false }); }
+  catch(e){ VOICE.joining = false; renderVoice(); toast("Microphone not allowed — tap the 🔒 next to the address bar, allow the microphone, and try again", true); return; }
+  VOICE.joining = false; VOICE.on = true; VOICE.muted = false; VOICE.people = {};
+  try{ VOICE.actx = VOICE.actx || new (window.AudioContext || window.webkitAudioContext)(); VOICE.actx.resume && VOICE.actx.resume(); }catch(e){}
+  voiceMeter(me.id, VOICE.stream);
+  voiceSubscribe();
+  VOICE.hbT = setInterval(voiceHeartbeat, 5000);
+  VOICE.levelT = setInterval(voiceLevels, 200);
+  VOICE.open = true;
+  renderVoice(); toast("🎙 You joined the voice chat");
+}
+function voiceSubscribe(){
+  if (!VOICE.on || !NET.client) return;
+  NET.client.subscribe(NET.topic + "vc/all", { qos: 0 });
+  NET.client.subscribe(NET.topic + "vc/to/" + me.id, { qos: 1 });
+  voiceAnnounce(true);
+}
+function voiceAnnounce(hello){ pub("vc/all", { t: "here", id: me.id, name: voiceName(), muted: VOICE.muted, hello: !!hello }); }
+function voiceHeartbeat(){
+  if (!VOICE.on) return;
+  voiceAnnounce(false);
+  const t = Date.now();
+  Object.keys(VOICE.people).forEach(id => { if (t - VOICE.people[id].seen > 16000) voiceDrop(id); });
+  // retry broken links (only the side with the smaller id starts a call)
+  Object.keys(VOICE.people).forEach(id => { const pc = VOICE.peers[id]; if ((!pc || ["failed","closed"].includes(pc.connectionState)) && me.id < id){ voiceDrop(id, true); voiceCall(id); } });
+  renderVoice();
+}
+function voiceLeave(silent){
+  if (!VOICE.on) return;
+  pub("vc/all", { t: "bye", id: me.id });
+  Object.keys(VOICE.peers).forEach(id => voiceDrop(id, true));
+  VOICE.people = {};
+  if (VOICE.stream) VOICE.stream.getTracks().forEach(t => t.stop());
+  VOICE.stream = null; VOICE.on = false; VOICE.meters = {};
+  clearInterval(VOICE.hbT); clearInterval(VOICE.levelT);
+  try{ NET.client && NET.client.unsubscribe([NET.topic + "vc/all", NET.topic + "vc/to/" + me.id]); }catch(e){}
+  renderVoice(); if (!silent) toast("You left the voice chat");
+}
+function voiceMute(){
+  if (!VOICE.on) return;
+  VOICE.muted = !VOICE.muted;
+  VOICE.stream.getAudioTracks().forEach(t => t.enabled = !VOICE.muted);
+  voiceAnnounce(false); renderVoice();
+}
+function voiceDrop(id, keepPerson){
+  const pc = VOICE.peers[id];
+  if (pc){ try{ pc.close(); }catch(e){} if (pc._audio){ pc._audio.srcObject = null; pc._audio.remove(); } delete VOICE.peers[id]; }
+  delete VOICE.meters[id];
+  if (!keepPerson){ delete VOICE.people[id]; renderVoice(); }
+}
+function voicePeer(id){
+  const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+  pc._pending = []; pc._remoteSet = false;
+  VOICE.stream.getTracks().forEach(t => pc.addTrack(t, VOICE.stream));
+  pc.onicecandidate = e => { if (e.candidate) pub("vc/to/" + id, { t: "ice", from: me.id, c: e.candidate.toJSON() }); };
+  pc.ontrack = e => {
+    const s = e.streams[0] || new MediaStream([e.track]);
+    if (!pc._audio){ const a = document.createElement("audio"); a.autoplay = true; a.setAttribute("playsinline", ""); a.style.display = "none"; document.body.appendChild(a); pc._audio = a; }
+    pc._audio.srcObject = s; pc._audio.play().catch(() => {});
+    voiceMeter(id, s);
+  };
+  pc.onconnectionstatechange = () => renderVoice();
+  VOICE.peers[id] = pc;
+  return pc;
+}
+async function voiceFlush(pc){ pc._remoteSet = true; for (const c of pc._pending.splice(0)) await pc.addIceCandidate(c).catch(() => {}); }
+async function voiceCall(id){
+  if (!VOICE.on || VOICE.peers[id]) return;
+  const pc = voicePeer(id);
+  try{ await pc.setLocalDescription(await pc.createOffer()); pub("vc/to/" + id, { t: "offer", from: me.id, sdp: pc.localDescription.toJSON() }); }catch(e){ voiceDrop(id, true); }
+}
+async function voiceOnMessage(sub, m){
+  if (!VOICE.on || !m) return;
+  if (sub === "vc/all"){
+    if (!m.id || m.id === me.id) return;
+    if (m.t === "bye"){ voiceDrop(m.id); return; }
+    if (m.t !== "here") return;
+    const known = VOICE.people[m.id];
+    VOICE.people[m.id] = { name: String(m.name || "Guest").slice(0, 40), muted: !!m.muted, seen: Date.now() };
+    if (m.hello) voiceAnnounce(false);                         // let the newcomer know we're here
+    if (!VOICE.peers[m.id] && me.id < m.id) voiceCall(m.id);    // exactly one side starts the call
+    if (!known) toast("🎙 " + VOICE.people[m.id].name + " joined voice");
+    renderVoice();
+    return;
+  }
+  if (sub !== "vc/to/" + me.id || !m.from) return;
+  const from = m.from;
+  try{
+    if (m.t === "offer"){
+      if (VOICE.peers[from]) voiceDrop(from, true);
+      const pc = voicePeer(from);
+      await pc.setRemoteDescription(m.sdp); await voiceFlush(pc);
+      await pc.setLocalDescription(await pc.createAnswer());
+      pub("vc/to/" + from, { t: "answer", from: me.id, sdp: pc.localDescription.toJSON() });
+      if (!VOICE.people[from]) VOICE.people[from] = { name: "…", muted: false, seen: Date.now() };
+    } else if (m.t === "answer"){
+      const pc = VOICE.peers[from]; if (pc && !pc._remoteSet){ await pc.setRemoteDescription(m.sdp); await voiceFlush(pc); }
+    } else if (m.t === "ice" && m.c){
+      const pc = VOICE.peers[from]; if (!pc) return;
+      if (pc._remoteSet) await pc.addIceCandidate(m.c).catch(() => {}); else pc._pending.push(m.c);
+    }
+  }catch(e){}
+  renderVoice();
+}
+/* who is speaking: a tiny level meter per audio stream */
+function voiceMeter(id, stream){
+  try{
+    if (!VOICE.actx) return;
+    const src = VOICE.actx.createMediaStreamSource(stream), an = VOICE.actx.createAnalyser();
+    an.fftSize = 512; src.connect(an);
+    VOICE.meters[id] = { an, buf: new Uint8Array(an.fftSize), on: false };
+  }catch(e){}
+}
+function voiceLevels(){
+  let changed = false;
+  Object.keys(VOICE.meters).forEach(id => {
+    const m = VOICE.meters[id]; m.an.getByteTimeDomainData(m.buf);
+    let s = 0; for (let i = 0; i < m.buf.length; i++){ const v = (m.buf[i] - 128) / 128; s += v * v; }
+    const on = Math.sqrt(s / m.buf.length) > .04 && !(id === me.id && VOICE.muted);
+    if (on !== m.on){ m.on = on; changed = true; }
+  });
+  if (changed) renderVoice(true);
+}
+function voiceState(id){
+  const pc = VOICE.peers[id]; if (!pc) return "connecting";
+  const s = pc.connectionState || pc.iceConnectionState;
+  return s === "connected" || s === "completed" ? "ok" : s === "failed" ? "failed" : "connecting";
+}
+function renderVoice(levelsOnly){
+  const btn = $("#voiceBtn"), mic = $("#micBtn");
+  if (!btn) return;
+  btn.classList.toggle("hidden", !voiceAvailable());
+  mic.classList.toggle("hidden", !VOICE.on);
+  const n = Object.keys(VOICE.people).length + (VOICE.on ? 1 : 0);
+  const speaking = VOICE.on && Object.keys(VOICE.meters).some(id => VOICE.meters[id].on);
+  btn.className = "iconbtn voice-btn" + (VOICE.on ? " on" : "") + (speaking ? " talk" : "") + (voiceAvailable() ? "" : " hidden");
+  btn.innerHTML = VOICE.joining ? "🎙 …" : VOICE.on ? '🎙 <span class="vc">' + n + '</span>' : '🎙 <span class="vl">Voice</span>';
+  mic.textContent = VOICE.muted ? "🔇" : "🎤"; mic.title = VOICE.muted ? "Unmute" : "Mute"; mic.classList.toggle("muted", VOICE.muted);
+  const box = $("#voicePanel");
+  if (!VOICE.open){ box.classList.add("hidden"); return; }
+  box.classList.remove("hidden");
+  if (!VOICE.on){
+    box.innerHTML = '<div class="vp-head"><b>🎙 Voice chat</b><button class="iconbtn" data-action="voice-close" aria-label="Close">✕</button></div>' +
+      '<p class="small muted" style="margin:6px 0 10px">Talk with everyone in this room at any time. Your browser will ask to use the microphone.</p>' +
+      '<button class="btn primary" style="width:100%" data-action="voice-join" ' + (VOICE.joining ? "disabled" : "") + '>' + (VOICE.joining ? "Starting microphone…" : "Join voice") + '</button>' +
+      '<p class="small muted" style="margin:8px 0 0">Tip: use earphones so others don\'t hear an echo.</p>';
+    return;
+  }
+  const row = (id, name, muted, st) => { const m = VOICE.meters[id], on = m && m.on;
+    return '<div class="vp-row"><span class="vp-dot' + (on ? " on" : "") + '"></span><span class="vp-nm">' + esc(name) + '</span>' +
+      (muted ? '<span title="Muted">🔇</span>' : "") + (st === "ok" || st === "me" ? "" : st === "failed" ? '<span class="small" style="color:#f87171" title="Your networks could not connect directly">can\'t connect</span>' : '<span class="small muted">connecting…</span>') + '</div>'; };
+  box.innerHTML = '<div class="vp-head"><b>🎙 Voice chat</b><button class="iconbtn" data-action="voice-close" aria-label="Close">✕</button></div>' +
+    '<div class="vp-list">' + row(me.id, voiceName() + " (you)", VOICE.muted, "me") +
+    Object.keys(VOICE.people).sort((a, b) => VOICE.people[a].name.localeCompare(VOICE.people[b].name)).map(id => row(id, VOICE.people[id].name, VOICE.people[id].muted, voiceState(id))).join("") + '</div>' +
+    (Object.keys(VOICE.people).length ? "" : '<p class="small muted" style="margin:6px 0">Nobody else is in voice yet. Tell your friends to press 🎙.</p>') +
+    '<div class="row" style="margin-top:10px;flex-wrap:nowrap"><button class="btn" style="flex:1" data-action="voice-mute">' + (VOICE.muted ? "🎤 Unmute" : "🔇 Mute") + '</button><button class="btn danger" style="flex:1" data-action="voice-leave">Leave</button></div>';
+}
+window.addEventListener("pagehide", () => { if (VOICE.on) pub("vc/all", { t: "bye", id: me.id }); });
+
 /* ---------- only one tab may run the auction ---------- */
 function claimHostTab(){ try{ localStorage.setItem(KEY_TAB, TAB_ID); }catch(e){} }
 window.addEventListener("storage", e => {
@@ -2196,12 +2466,12 @@ function renderAll(){
   renderHeader();
   if (role === "player"){
     const shouldJoin = !state || !state.players.length || ui.picking || (!myTeam() && !ui.spectate);
-    if (shouldJoin !== (prefs.view === "join")){ setView(shouldJoin ? "join" : "auction"); return; }
+    if (shouldJoin !== (prefs.view === "join")){ setView(shouldJoin ? "join" : (ui.lastView || "auction")); ui.lastView = null; return; }
   } else if (!state){ setView("setup"); return; }
   const v = prefs.view;
   if (v === "auction") renderAuction();
-  if (v === "teams") renderTeams();
-  if (v === "league" && !(ui.reveal && Date.now() - ui.reveal.at < REVEAL_MS && $("#liveResults"))) renderLeague();
+  if (v === "teams" && !(document.activeElement && document.activeElement.closest && document.activeElement.closest("#teamsBody select"))) renderTeams();
+  if (v === "league" && !(liveReveal() && $("#liveResults"))) renderLeague();
   if (v === "players") renderPlayers();
   if (v === "settings" && !(document.activeElement && document.activeElement.closest && document.activeElement.closest("#settingsBody"))) renderSettings();
   if (v === "join") renderJoin();
@@ -2506,7 +2776,7 @@ function miniCardHTML(p, i, slotPos, chem, editable, sel){
   '</div>';
 }
 function squadHTML(t){
-  const editable = canEditTeam(t), lu = lineupOf(t), F = FORMATIONS[lu.formation], e = evalTeam(t, false, lu);
+  const editable = canEditTeam(t), lu = lineupOf(t), F = FORMATIONS[lu.formation], e = evalTeam(t, false, matchLineup(t));
   const xiIds = new Set(lu.slots.filter(Boolean));
   const bench = teamPlayers(t).filter(p => !xiIds.has(p.id)).sort((a, b) => b.ovr - a.ovr || (a.id < b.id ? -1 : 1));
   const sel = ui.sqSel && ui.sqSel.team === t.id ? ui.sqSel.ref : null;
@@ -2536,14 +2806,18 @@ function squadHTML(t){
       '<span class="pill">' + p.ovr + '</span><span class="bfit" title="Fitness"><i style="width:' + c.fit + '%;background:' + fitColor(c.fit) + '"></i></span>' +
       (c.form ? '<span class="small" style="color:' + (c.form > 0 ? "#4ade80" : "#f87171") + '">' + (c.form > 0 ? "▲" : "▼") + '</span>' : "") + '</div>'; }).join("")
       : '<div class="muted small">' + (teamPlayers(t).length ? "Everyone is in the starting XI." : "Buy players in the auction first.") + '</div>') +
-    (editable && sel && sel[0] === "s" && lu.slots[+sel.slice(1)] ? '<button class="btn ghost" style="margin-top:8px;width:100%" data-action="sq-bench">⬇ Move selected player to the bench</button>' : "") + '</div>';
+    '</div>';
+  const sp = selPid && playerById(selPid);
+  const selBar = sp && editable ? '<div class="sq-bar"><span class="nm">' + esc(sp.name) + ' <span class="muted small">' + sp.pos.join("/") + ' · ' + sp.ovr + ' · fit ' + cond(sp.id).fit + '%</span></span><span class="small muted">Now tap where he should go</span>' +
+    (sel[0] === "s" ? '<button class="btn" data-action="sq-bench" style="padding:6px 10px">⬇ Rest him</button>' : "") +
+    '<button class="iconbtn" data-action="sq-clear" aria-label="Cancel">✕</button></div>' : "";
   return head + (warn.length ? '<div class="notice" style="margin-bottom:12px">' + warn.map(esc).join("<br>") + '</div>' : "") +
-    '<div class="squad-wrap">' + pitch + '<div class="squad-side">' + info + benchHTML + '</div></div>';
+    '<div class="squad-wrap">' + pitch + '<div class="squad-side">' + info + benchHTML + '</div></div>' + selBar;
 }
 function playerInfoHTML(p, t){
   const c = cond(p.id), s = state.league && state.league.stats && state.league.stats[p.id];
   const labels = p.pos[0] === "GK" ? FACE_GK : FACE;
-  return '<div class="panel pinfo"><div class="row" style="flex-wrap:nowrap;align-items:flex-start"><div style="width:110px;flex:none">' + cardHTML(p) + '</div><div style="min-width:0;flex:1">' +
+  return '<div class="panel pinfo"><div class="row" style="flex-wrap:nowrap;align-items:flex-start"><div style="width:130px;flex:none">' + cardHTML(p) + '</div><div style="min-width:0;flex:1">' +
     '<h3 style="margin:0 0 4px">' + esc(p.name) + '</h3><div class="small muted">' + esc(p.club) + ' · ' + esc(p.nationality) + (p.age ? ' · ' + p.age + ' yrs' : "") + '</div>' +
     '<div class="small" style="margin-top:4px">Positions: <b>' + p.pos.join(" / ") + '</b></div>' +
     '<div class="faces">' + p.st.map((v, i) => '<div><span>' + labels[i] + '</span><b>' + v + '</b></div>').join("") + '</div>' +
@@ -2566,6 +2840,7 @@ function squadSwap(t, from, to){
 }
 function setLineup(t, lu){
   const clean = sanitizeLineup(t, lu); if (!clean) return;
+  if (!isHost() && (NET.status !== "online" || !NET.hostOnline)){ toast("The master is offline — your changes can't be saved right now", true); renderTeams(); return; }
   t.lineup = clean;
   if (isHost()) persist();
   else { ui.pendingLineup = { teamId: t.id, lu: JSON.stringify(clean), at: Date.now() }; sendCmd({ type: "lineup", teamId: t.id, lineup: clean }); }
@@ -2581,11 +2856,12 @@ function onSquadPick(ref){
 }
 
 /* ---------- league view ---------- */
-const REVEAL_MS = 9000;
+const REVEAL_MS = 45000;   // a matchday's 90 minutes are shown over 45 seconds
 function teamDot(id){ const t = teamById(id); return t ? '<span class="dot" style="background:' + esc(t.color) + '"></span>' : ""; }
 function teamNm(id){ const t = teamById(id); return t ? esc(t.name) : "?"; }
-function liveMinute(){ return ui.reveal ? Math.min(90, Math.floor((Date.now() - ui.reveal.at) / (REVEAL_MS - 1000) * 90)) : 90; }
-function isLive(mi){ return ui.reveal && ui.reveal.md === mi && Date.now() - ui.reveal.at < REVEAL_MS; }
+function liveReveal(){ const L = state && state.league, r = L && L.reveal; return r && L.results && L.results[r.md] && now() < r.at + (r.dur || REVEAL_MS) ? r : null; }
+function liveMinute(){ const r = liveReveal(); return r ? clamp(Math.floor((now() - r.at) / ((r.dur || REVEAL_MS) - 2000) * 90), 0, 90) : 90; }
+function isLive(mi){ const r = liveReveal(); return !!r && r.md === mi; }
 function resultRow(r, mi, k){
   const live = isLive(mi), min = live ? liveMinute() : 90;
   const gh = live ? r.goals.filter(g => g.s === "h" && g.m <= min).length : r.gh, ga = live ? r.goals.filter(g => g.s === "a" && g.m <= min).length : r.ga;
@@ -2594,6 +2870,12 @@ function resultRow(r, mi, k){
     (live ? '<span class="fx-min">' + min + "'</span>" : "") + '</button>';
 }
 function renderLeague(){
+  try{ renderLeagueInner(); }
+  catch(e){
+    $("#leagueBody").innerHTML = '<div class="panel"><h2>League</h2><p class="muted">The saved league data looks damaged.</p>' + (isHost() ? '<button class="btn danger" data-action="league-wipe">Start a new season</button>' : "") + '</div>';
+  }
+}
+function renderLeagueInner(){
   if (!state) return;
   const L = state.league, box = $("#leagueBody");
   const intro = '<p class="muted small" style="margin:0">Every team plays every other team twice (home and away). The <b>AI match engine</b> decides each match from squad strength, players\' positions, chemistry, fitness, form, morale, tactics and home advantage. <b>No luck:</b> the same squads in the same condition always give the same result — so pick your XI and rotate tired players!</p>';
@@ -2607,24 +2889,27 @@ function renderLeague(){
     return;
   }
   const rows = standings(), total = L.fixtures.length, next = L.fixtures[L.played];
-  const live = ui.reveal && Date.now() - ui.reveal.at < REVEAL_MS;
+  const live = !!liveReveal();
   let html = '<div class="panel league-top"><div><h2 style="margin:0">🏆 League · Season ' + (L.season || 1) + '</h2><div class="small muted">' + (L.status === "done" && !live ? "Finished" : "Matchday " + Math.min(L.played + (live ? 0 : 1), total) + " of " + total) + '</div></div>' +
     (isHost() ? '<div class="row">' + (L.status === "running" ? '<button class="btn primary big" data-action="league-play" ' + (live ? "disabled" : "") + '>▶ Play matchday ' + (L.played + 1) + '</button>' : "") +
-      (L.played ? '<button class="btn ghost" data-action="league-undo">↶ Undo last matchday</button>' : "") + '<button class="btn ghost" data-action="league-reset">New season</button></div>' : "") + '</div>';
+      (L.played && L.prev && !live ? '<button class="btn ghost" data-action="league-undo">↶ Undo last matchday</button>' : "") + '<button class="btn ghost" data-action="league-reset">New season</button></div>' : "") + '</div>';
   if (L.status === "done" && !live){
     const champ = rows[0] && rows[0].t;
     html += '<div class="panel champ" style="--tc:' + readable(champ.color) + '"><div style="font-size:48px">🏆</div><div><div class="small muted">Champions</div><h2 style="margin:0;color:' + readable(champ.color) + '">' + esc(champ.name) + '</h2>' + (champ.owner ? '<div class="small">' + teamLabel(champ) + '</div>' : "") + '</div></div>';
   }
   html += '<div class="league-grid"><div class="panel"><h3>Table</h3><div style="overflow-x:auto"><table class="ltable"><thead><tr><th>#</th><th>Team</th><th class="num">P</th><th class="num">W</th><th class="num">D</th><th class="num">L</th><th class="num">GF</th><th class="num">GA</th><th class="num">GD</th><th class="num">Pts</th><th>Form</th></tr></thead><tbody>' +
     rows.map((r, i) => '<tr' + (r.t.owner && r.t.owner.id === me.id ? ' class="me"' : "") + '><td>' + (i + 1) + '</td><td class="tm">' + teamDot(r.t.id) + ' ' + esc(r.t.name) + '</td><td class="num">' + r.p + '</td><td class="num">' + r.w + '</td><td class="num">' + r.d + '</td><td class="num">' + r.l + '</td><td class="num">' + r.gf + '</td><td class="num">' + r.ga + '</td><td class="num">' + (r.gf - r.ga > 0 ? "+" : "") + (r.gf - r.ga) + '</td><td class="num"><b>' + r.pts + '</b></td><td class="form">' + r.form.slice(-5).map(x => '<i class="f' + x + '">' + x + '</i>').join("") + '</td></tr>').join("") +
-    '</tbody></table></div><p class="small muted" style="margin:8px 0 0">' + intro.replace(/<\/?p[^>]*>/g, "") + '</p></div>';
+    '</tbody></table></div>' + (state.teams.some(t => !L.fixtures.flat(2).includes(t.id)) ? '<p class="small" style="color:#fbbf24;margin:8px 0 0">Teams added after the league started join next season.</p>' : "") + '<p class="small muted" style="margin:8px 0 0">' + intro.replace(/<\/?p[^>]*>/g, "") + '</p></div>';
   html += '<div class="league-side">';
   if (L.results.length){
     const mi = L.results.length - 1;
-    html += '<div class="panel"><h3>' + (isLive(mi) ? '<span class="live-dot"></span> LIVE · ' : "") + 'Matchday ' + (mi + 1) + ' results</h3><div class="fx-list" id="liveResults">' + L.results[mi].map((r, k) => resultRow(r, mi, k)).join("") + '</div><div class="small muted" style="margin-top:6px">Tap a match for the report and why it ended that way.</div></div>';
+    html += '<!--RP--><div class="panel"><div class="row" style="justify-content:space-between"><h3 style="margin:0">' + (isLive(mi) ? '<span class="live-dot"></span> LIVE · ' : "") + 'Matchday ' + (mi + 1) + (isLive(mi) ? "" : " results") + '</h3>' +
+      (isLive(mi) && isHost() ? '<button class="btn ghost" style="padding:5px 10px;font-size:13px" data-action="league-skip">⏩ Full time</button>' : "") + '</div>' +
+      '<div class="fx-list" id="liveResults" style="margin-top:10px">' + L.results[mi].map((r, k) => resultRow(r, mi, k)).join("") + '</div>' +
+      (isLive(mi) ? '<div class="live-feed" id="liveFeed">' + liveFeedHTML(mi) + '</div>' : '<div class="small muted" style="margin-top:6px">Tap a match for the report and why it ended that way.</div>') + '</div><!--/RP-->';
   }
   if (next && L.status === "running"){
-    html += '<div class="panel"><h3>Next: matchday ' + (L.played + 1) + '</h3><div class="fx-list">' + next.map(([h, a]) => { const eh = evalTeam(teamById(h), true), ea = evalTeam(teamById(a), false);
+    html += '<div class="panel"><h3>Next: matchday ' + (L.played + 1) + '</h3><div class="fx-list">' + next.map(([h, a]) => { if (!teamById(h) || !teamById(a)) return ""; const eh = evalTeam(teamById(h), true, matchLineup(teamById(h))), ea = evalTeam(teamById(a), false, matchLineup(teamById(a)));
       return '<div class="fx pre"><span class="fx-t h">' + teamNm(h) + ' ' + teamDot(h) + '</span><span class="fx-s small">' + eh.ovr + ' vs ' + ea.ovr + '</span><span class="fx-t a">' + teamDot(a) + ' ' + teamNm(a) + '</span></div>'; }).join("") +
       '</div>' + (myTeam() || isHost() ? '<div class="small muted" style="margin-top:6px">Change your XI, formation or tactics in the <a href="#" data-goto="teams">Teams</a> tab before the master plays this matchday.</div>' : "") + '</div>';
   }
@@ -2634,7 +2919,8 @@ function renderLeague(){
   const scorers = top("g", s => s.g), assists = top("a", s => s.a), best = top("rs", s => s.apps ? s.rs / s.apps : 0, id => st[id].apps >= Math.max(1, Math.floor(L.played / 2)));
   const ownerOf = pid => { const s = state.sales.find(x => x.playerId === pid); return s ? teamDot(s.teamId) : ""; };
   const list = (title, arr, val) => '<div><div class="small muted" style="font-weight:800;margin-bottom:4px">' + title + '</div>' + (arr.length ? arr.map(id => '<div class="srow">' + ownerOf(id) + ' <span>' + esc(playerById(id).name) + '</span><b>' + val(st[id]) + '</b></div>').join("") : '<div class="muted small">–</div>') + '</div>';
-  if (L.played) html += '<div class="panel"><h3>Stats</h3><div class="stat-grid">' + list("⚽ Goals", scorers, s => s.g) + list("🅰 Assists", assists, s => s.a) + list("⭐ Avg rating", best, s => (s.rs / s.apps).toFixed(1)) + '</div></div>';
+  if (L.played && liveReveal()) html += '<div class="panel small muted">⚽ Stats update at full time.</div>';
+  else if (L.played) html += '<div class="panel"><h3>Stats</h3><div class="stat-grid">' + list("⚽ Goals", scorers, s => s.g) + list("🅰 Assists", assists, s => s.a) + list("⭐ Avg rating", best, s => (s.rs / s.apps).toFixed(1)) + '</div></div>';
   html += '</div></div>';
   if (L.results.length > 1){
     html += '<div class="panel" style="margin-top:14px"><h3>All results</h3>' + L.results.map((md, mi) => '<details' + (mi === L.results.length - 1 ? " open" : "") + '><summary>Matchday ' + (mi + 1) + '</summary><div class="fx-list">' + md.map((r, k) => resultRow(r, mi, k)).join("") + '</div></details>').slice().reverse().join("") + '</div>';
@@ -2642,35 +2928,50 @@ function renderLeague(){
   if (L.status === "running" && L.played < total){
     html += '<div class="panel" style="margin-top:14px"><h3>Remaining fixtures</h3>' + L.fixtures.slice(L.played).map((md, j) => '<details><summary>Matchday ' + (L.played + j + 1) + (L.played + j + 1 > total / 2 ? " (2nd leg)" : "") + '</summary><div class="fx-list">' + md.map(([h, a]) => '<div class="fx pre"><span class="fx-t h">' + teamNm(h) + ' ' + teamDot(h) + '</span><span class="fx-s">vs</span><span class="fx-t a">' + teamDot(a) + ' ' + teamNm(a) + '</span></div>').join("") + '</div></details>').join("") + '</div>';
   }
+  if (live){   // while matches are being played, show them first (phones see them without scrolling)
+    const a = html.indexOf("<!--RP-->"), b = html.indexOf("<!--/RP-->");
+    if (a >= 0 && b > a){ const rp = html.slice(a, b + 10); html = html.slice(0, a) + html.slice(b + 10); const g = html.indexOf('<div class="league-grid">'); html = html.slice(0, g) + rp.replace('class="panel"', 'class="panel" style="margin-bottom:14px;border-color:#ef4444"') + html.slice(g); }
+  }
   box.innerHTML = html;
 }
-/* while a matchday is "live", tick the minute and the scores */
-let lastLiveGoals = -1;
+function liveFeedHTML(mi){
+  const md = state.league.results[mi], min = liveMinute(), ev = [];
+  md.forEach(r => r.goals.forEach(g => { if (g.m <= min) ev.push({ m: g.m, r, g }); }));
+  ev.sort((x, y) => x.m - y.m);
+  return ev.map(({ m, r, g }) => { const tid = g.s === "h" ? r.h : r.a, p = g.p && playerById(g.p);
+    return '<div>' + m + "' ⚽ <b>" + (g.og ? "Own goal" : esc(p ? p.name : "?")) + '</b> ' + teamDot(tid) + ' <span class="muted">' + teamNm(tid) + '</span></div>'; }).join("") || '<div class="muted">Kick-off!</div>';
+}
+/* while a matchday is "live", tick the minute and the scores (everyone follows the master's clock) */
+let lastLiveGoals = -1, liveWas = null;
 setInterval(() => {
-  if (!ui.reveal || !state || !state.league) return;
-  const mi = ui.reveal.md, md = state.league.results[mi];
-  if (!md){ ui.reveal = null; return; }
-  const live = isLive(mi);
-  if (prefs.view === "league"){
-    const box = $("#liveResults");
-    if (box && live){
-      box.innerHTML = md.map((r, k) => resultRow(r, mi, k)).join("");
-      const min = liveMinute(), goals = md.reduce((a, r) => a + r.goals.filter(g => g.m <= min).length, 0);
-      if (lastLiveGoals >= 0 && goals > lastLiveGoals) sfx("bid");
-      lastLiveGoals = goals;
-    }
+  if (!state || !state.league) return;
+  const r = liveReveal(), key = r ? (state.league.lid || "") + ":" + r.md : null;
+  if (r && prefs.view === "league"){
+    const box = $("#liveResults"), feed = $("#liveFeed");
+    if (!box){ renderLeague(); return; }
+    box.innerHTML = state.league.results[r.md].map((x, k) => resultRow(x, r.md, k)).join("");
+    if (feed) feed.innerHTML = liveFeedHTML(r.md);
+    const min = liveMinute(), goals = state.league.results[r.md].reduce((a, x) => a + x.goals.filter(g => g.m <= min).length, 0);
+    if (lastLiveGoals >= 0 && goals > lastLiveGoals) sfx("bid");
+    lastLiveGoals = goals;
   }
-  if (!live){ ui.reveal = null; lastLiveGoals = -1; if (prefs.view === "league") renderLeague(); sfx("sold"); if (state.league.status === "done"){ const ch = standings()[0]; if (ch) confetti(ch.t.color); } }
+  if (liveWas && !r){   // full time
+    lastLiveGoals = -1;
+    if (prefs.view === "league") renderLeague();
+    sfx("sold");
+    if (state.league.status === "done"){ const ch = standings()[0]; if (ch) confetti(ch.t.color); }
+  }
+  liveWas = key;
 }, 300);
 function openMatch(mi, k){
   const L = state.league, r = L && L.results[mi] && L.results[mi][k]; if (!r) return;
-  if (isLive(mi)){ toast("The match is still being played…"); return; }
+  if (isLive(mi)){ toast("The match is still being played — the report opens at full time", true); return; }
   const H = r.H, A = r.A;
   const cmp = (lbl, h, a, fmt) => { const tot = Math.max(1, Math.abs(h) + Math.abs(a)); return '<div class="cmp"><b>' + (fmt ? fmt(h) : h) + '</b><div class="cbar"><i style="width:' + (100 * Math.abs(h) / tot) + '%;background:' + readable((teamById(r.h) || {}).color) + '"></i><i style="width:' + (100 * Math.abs(a) / tot) + '%;background:' + readable((teamById(r.a) || {}).color) + '"></i></div><b>' + (fmt ? fmt(a) : a) + '</b><span>' + lbl + '</span></div>'; };
   const xiList = (S, side) => S.xi.map(([pid, slot]) => { const p = pid && playerById(pid); return '<div class="xrow"><span class="muted">' + slot + '</span><span class="nm">' + (p ? esc(p.name) : '<i class="muted">youth player</i>') +
     r.goals.filter(g => g.s === side && g.p === pid).map(() => " ⚽").join("") + (r.goals.some(g => g.s === side && g.a === pid) ? " 🅰" : "") + (pid === r.motm ? " ⭐" : "") + '</span><b>' + (pid && r.rat[pid] != null ? r.rat[pid].toFixed(1) : "") + '</b></div>'; }).join("");
   openModal('<div class="mhead"><div>' + teamDot(r.h) + '<b>' + teamNm(r.h) + '</b><div class="small muted">' + H.f + ' · ' + MENTALITIES[H.ment] + '</div></div><div class="mscore">' + r.gh + ' – ' + r.ga + '</div><div>' + teamDot(r.a) + '<b>' + teamNm(r.a) + '</b><div class="small muted">' + A.f + ' · ' + MENTALITIES[A.ment] + '</div></div></div>' +
-    '<div class="goals">' + (r.goals.length ? r.goals.map(g => '<div class="g ' + g.s + '">' + g.m + "' ⚽ " + esc((playerById(g.p) || { name: "?" }).name) + (g.a ? ' <span class="muted small">(' + esc((playerById(g.a) || { name: "?" }).name) + ')</span>' : "") + '</div>').join("") : '<div class="muted small" style="text-align:center">No goals</div>') + '</div>' +
+    '<div class="goals">' + (r.goals.length ? r.goals.map(g => '<div class="g ' + g.s + '">' + g.m + "' ⚽ " + (g.og ? "Own goal" : esc((playerById(g.p) || { name: "?" }).name)) + (g.a ? ' <span class="muted small">(' + esc((playerById(g.a) || { name: "?" }).name) + ')</span>' : "") + '</div>').join("") : '<div class="muted small" style="text-align:center">No goals</div>') + '</div>' +
     '<div class="panel why"><h3>🤖 Why this result</h3><ul>' + whyLines(r).map(x => '<li>' + esc(x) + '</li>').join("") + '</ul></div>' +
     '<div class="cmps">' + cmp("Possession %", r.poss, 100 - r.poss) + cmp("Expected goals", r.xgH, r.xgA) + cmp("Team rating", H.ovr, A.ovr) + cmp("Chemistry", H.chem, A.chem) +
       cmp("Attack", H.att, A.att, v => Math.round(v)) + cmp("Midfield", H.mid, A.mid, v => Math.round(v)) + cmp("Defence", H.def, A.def, v => Math.round(v)) + cmp("Avg fitness %", H.fit, A.fit) + '</div>' +
@@ -2933,12 +3234,25 @@ document.addEventListener("click", e => {
       location.search = "?room=" + code + (params.get("broker") ? "&broker=" + encodeURIComponent(params.get("broker")) : ""); return;
     }
     case "room": openRoom(); return;
+    case "voice": VOICE.open = !VOICE.open; renderVoice(); return;
+    case "voice-close": VOICE.open = false; renderVoice(); return;
+    case "voice-join": voiceJoin(); return;
+    case "voice-mute": voiceMute(); return;
+    case "voice-leave": voiceLeave(); VOICE.open = false; renderVoice(); return;
     case "player": openPlayer(id); return;
     case "team-view": ui.teamView = a.dataset.team; ui.sqSel = null; renderTeams(); return;
     case "sq-pick": onSquadPick(a.dataset.ref); return;
     case "sq-info": ui.sqSel = { team: ui.teamView, ref: "p" + id }; renderTeams(); return;
-    case "sq-auto": { const t = teamById(ui.teamView); if (!canEditTeam(t)) return; const lu = lineupOf(t); ui.sqSel = null; setLineup(t, { formation: lu.formation, slots: bestXI(teamPlayers(t), lu.formation), mentality: lu.mentality }); toast("Strongest XI picked"); return; }
-    case "sq-bench": { const t = teamById(ui.teamView); if (!canEditTeam(t) || !ui.sqSel) return; const lu = lineupOf(t), slots = lu.slots.slice(); slots[+ui.sqSel.ref.slice(1)] = null; ui.sqSel = null; setLineup(t, { formation: lu.formation, slots, mentality: lu.mentality }); return; }
+    case "sq-auto": { const t = teamById(ui.teamView); if (!canEditTeam(t)) return; const lu = lineupOf(t); ui.sqSel = null; setLineup(t, { formation: lu.formation, slots: bestXI(teamPlayers(t), lu.formation, t), mentality: lu.mentality }); toast("Strongest XI picked (fitness and chemistry included)"); return; }
+    case "sq-clear": ui.sqSel = null; renderTeams(); return;
+    case "sq-bench": {   // rest the player: the best substitute (not him) takes his place
+      const t = teamById(ui.teamView); if (!canEditTeam(t) || !ui.sqSel || ui.sqSel.ref[0] !== "s") return;
+      const lu = lineupOf(t), slots = lu.slots.slice(), i = +ui.sqSel.ref.slice(1), out = slots[i], slot = FORMATIONS[lu.formation][i][0];
+      let best = null, bv = youthVal(slot);
+      teamPlayers(t).forEach(p => { if (p.id === out || slots.includes(p.id)) return; const v = slotValue(p, slot); if (v > bv){ bv = v; best = p; } });
+      if (!best){ toast("No substitute can play there — the place will be filled by a youth player", true); }
+      slots[i] = best ? best.id : null; ui.sqSel = null; setLineup(t, { formation: lu.formation, slots, mentality: lu.mentality }); return;
+    }
     case "match": openMatch(+a.dataset.md, +a.dataset.k); return;
     case "export-csv": exportCSV(); return;
   }
@@ -3003,13 +3317,15 @@ document.addEventListener("click", e => {
     case "league-start": startLeague(); break;
     case "league-play": playMatchday(); break;
     case "league-undo": undoMatchday(); break;
-    case "league-reset": if (confirm("Start a new season? The table, results and players' fitness are reset. Squads stay the same.")){ state.league = { season: (state.league && state.league.season) || 1 }; ui.reveal = null; persist(); renderAll(); } break;
+    case "league-skip": { const L = state.league; if (L && L.reveal){ L.reveal.at = Date.now() - (L.reveal.dur || REVEAL_MS); persist(); publishLeague(); renderLeague(); } break; }
+    case "league-wipe": state.league = { season: 1 }; persist(); publishLeague(); renderAll(); break;
+    case "league-reset": if (confirm("Start a new season? The table, results and players' fitness are reset. Squads stay the same.")){ const n = state.league && state.league.results ? state.league.results.length : 0; state.league = { season: (state.league && state.league.season) || 1 }; persist(); for (let i = 0; i < n; i++) clearLeagueResult(i); publishLeague(); renderAll(); } break;
     case "host-claim": { const t = teamById(a.dataset.team); if (!t) break; if (t.owner && t.owner.id !== me.id){ toast(t.name + " is already taken by " + t.owner.name, true); openRoom(); break; } state.teams.forEach(x => { if (x.owner && x.owner.id === me.id) x.owner = null; }); t.owner = { id: me.id, name: "Master" }; persist(); renderAll(); openRoom(); break; }
     case "switch-server": {
       if (!confirm("Move the room to another free server? The room code changes and friends must join again with the new link.")) break;
       const cur = +state.room.code.slice(-1) || 0, nxt = (cur + 1) % BROKERS.length;
       const newCode = newRoomCode(nxt);
-      closeRoomTopic(newCode);
+      voiceLeave(true); closeRoomTopic(newCode);
       state.room = { code: newCode }; state.teams.forEach(t => { if (t.owner && t.owner.id !== me.id) t.owner = null; });
       persist(); closeModal(); hostStartNet(); renderAll(); toast("New room code: " + state.room.code); break;
     }
@@ -3037,7 +3353,7 @@ document.addEventListener("click", e => {
     }
     case "reset":
       if (!confirm("Start a new auction? All teams, bids and sales will be cleared and the room code changes.\n(Tip: download a backup first.)")) break;
-      closeRoomTopic(null); state = null; undoStack = []; prefetchGen++; prefetchStarted = false; try{ localStorage.removeItem(KEY_STATE); }catch(e){}
+      voiceLeave(true); closeRoomTopic(null); state = null; undoStack = []; prefetchGen++; prefetchStarted = false; try{ localStorage.removeItem(KEY_STATE); }catch(e){}
       setView("setup"); renderHeader(); break;
   }
 });
@@ -3081,7 +3397,7 @@ document.addEventListener("change", e => {
     const lu = lineupOf(t);
     if (el.dataset.sq === "formation"){
       const xi = lu.slots.filter(Boolean).map(playerById).filter(Boolean);
-      setLineup(t, { formation: el.value, slots: bestXI(xi.length >= 11 ? xi : teamPlayers(t), el.value), mentality: lu.mentality });
+      setLineup(t, { formation: el.value, slots: bestXI(xi.length >= 11 ? xi : teamPlayers(t), el.value, t), mentality: lu.mentality });
     } else setLineup(t, { formation: lu.formation, slots: lu.slots, mentality: el.value });
     return;
   }
@@ -3168,6 +3484,7 @@ renderSetup();
 renderHeader();
 if (role === "player"){
   if (!me.name) me.name = "";
+  if (["teams","league","players"].includes(prefs.view)) ui.lastView = prefs.view;
   setView("join");
   playerStartNet();
 } else if (state){
