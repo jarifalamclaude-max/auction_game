@@ -1,0 +1,198 @@
+﻿name,position,nationality,club,age,rating,base_price,photo,positions,pac,sho,pas,dri,def,phy
+William Saliba,DEF,France,Arsenal,25,87,90,,CB/RB,82,40,70,73,88,84
+Gabriel Magalhães,DEF,Brazil,Arsenal,28,86,75,,CB,71,52,64,63,87,87
+Rúben Dias,DEF,Portugal,Man City,29,86,70,,CB,62,40,68,66,87,86
+Joško Gvardiol,DEF,Croatia,Man City,24,86,75,,CB/LB,80,62,74,76,85,82
+Virgil van Dijk,DEF,Netherlands,Liverpool,35,88,18,,CB,74,60,72,72,89,86
+Ibrahima Konaté,DEF,France,Liverpool,27,85,50,,CB,79,40,60,64,86,86
+Levi Colwill,DEF,England,Chelsea,23,82,45,,CB/LB,75,40,72,71,81,78
+Miloš Kerkez,DEF,Hungary,Liverpool,22,81,45,,LB/LWB/LM,85,55,74,77,77,75
+Destiny Udogie,DEF,Italy,Tottenham,23,80,40,,LB/LWB/LM,84,60,72,77,76,76
+Rayan Aït-Nouri,DEF,Algeria,Man City,25,82,40,,LB/LWB/LM,84,62,75,82,75,72
+Riccardo Calafiori,DEF,Italy,Arsenal,24,82,50,,LB/CB,76,62,74,74,80,80
+Trent Alexander-Arnold,DEF,England,Real Madrid,28,86,55,,RB/RWB/CM,74,72,91,81,76,70
+Reece James,DEF,England,Chelsea,26,83,35,,RB/RWB/CM,77,72,81,79,80,81
+Pedro Porro,DEF,Spain,Tottenham,27,82,40,,RB/RWB/RM,81,68,80,79,76,72
+Malo Gusto,DEF,France,Chelsea,23,81,35,,RB/RWB,85,55,72,78,77,74
+Declan Rice,MID,England,Arsenal,27,87,120,,CM/CDM,74,76,84,81,84,85
+Enzo Fernández,MID,Argentina,Chelsea,25,85,85,,CM/CDM/CAM,70,77,85,82,75,77
+Alexis Mac Allister,MID,Argentina,Liverpool,27,87,80,,CM/CDM/CAM,68,79,85,84,79,77
+Moisés Caicedo,MID,Ecuador,Chelsea,24,86,100,,CDM/CM/RB,74,63,78,80,86,84
+Cole Palmer,MID,England,Chelsea,24,87,120,,CAM/RW/RM/CF,76,86,86,88,50,66
+Bruno Fernandes,MID,Portugal,Man United,32,86,55,,CAM/CM,70,84,89,82,68,76
+Morgan Rogers,MID,England,Aston Villa,24,82,65,,CAM/LW/LM/CM,81,75,76,82,50,79
+Florian Wirtz,MID,Germany,Liverpool,23,88,130,,CAM/LW/CM,79,81,87,89,56,65
+Rodri,MID,Spain,Man City,30,88,75,,CDM/CM,62,79,86,82,86,84
+Sandro Tonali,MID,Italy,Newcastle,26,84,70,,CM/CDM,74,74,82,80,80,80
+Bukayo Saka,FWD,England,Arsenal,25,88,130,,RW/RM/LW,86,82,84,88,54,70
+Luis Díaz,FWD,Colombia,Bayern Munich,29,86,70,,LW/ST/LM,89,82,79,87,46,74
+Anthony Gordon,FWD,England,Newcastle,25,83,60,,LW/LM/ST,89,78,76,83,45,72
+Pedro Neto,FWD,Portugal,Chelsea,26,83,55,,RW/LW/RM,90,74,79,84,42,66
+Erling Haaland,FWD,Norway,Man City,26,91,180,,ST,87,93,69,80,45,88
+Alexander Isak,FWD,Sweden,Liverpool,27,87,120,,ST,85,87,74,86,40,74
+João Pedro,FWD,Brazil,Chelsea,25,83,70,,ST/CF/CAM,80,80,76,84,42,74
+Ollie Watkins,FWD,England,Aston Villa,30,82,35,,ST,83,82,72,79,46,79
+Mohamed Salah,FWD,Egypt,Liverpool,34,91,30,,RW/RM/ST,89,88,86,90,45,76
+Bryan Mbeumo,FWD,Cameroon,Man United,27,84,65,,RW/RM/ST,84,82,78,84,48,74
+Rayan Cherki,FWD,France,Man City,23,83,60,,CAM/LW/RW,79,79,82,88,34,62
+Noni Madueke,FWD,England,Arsenal,24,80,45,,RW/RM/LW,88,75,72,83,38,66
+Pau Cubarsí,DEF,Spain,Barcelona,19,85,80,,CB,72,38,75,70,85,76
+Ronald Araújo,DEF,Uruguay,Barcelona,27,83,50,,CB/RB,80,50,62,65,84,85
+Éder Militão,DEF,Brazil,Real Madrid,28,84,35,,CB/RB,82,52,66,70,84,83
+Antonio Rüdiger,DEF,Germany,Real Madrid,33,84,12,,CB,77,50,68,65,85,85
+Dean Huijsen,DEF,Spain,Real Madrid,21,83,60,,CB,74,50,76,72,82,80
+Robin Le Normand,DEF,Spain,Atlético Madrid,29,81,30,,CB,62,45,66,62,82,80
+Jules Koundé,DEF,France,Barcelona,27,86,65,,RB/CB,80,52,76,78,84,78
+Alejandro Balde,DEF,Spain,Barcelona,23,82,60,,LB/LWB/LM,91,55,74,81,74,70
+Álvaro Carreras,DEF,Spain,Real Madrid,23,81,35,,LB/LWB/CB,82,55,75,77,78,76
+Ferland Mendy,DEF,France,Real Madrid,31,79,18,,LB,82,50,70,75,79,79
+Javi Galán,DEF,Spain,Atlético Madrid,31,77,8,,LB/LWB,80,54,72,77,74,68
+Dani Carvajal,DEF,Spain,Real Madrid,34,82,8,,RB/RWB,72,60,78,78,81,78
+Marcos Llorente,DEF,Spain,Atlético Madrid,31,82,25,,RB/RWB/RM/CM,88,72,76,78,74,82
+Andrei Rațiu,DEF,Romania,Rayo Vallecano,28,78,12,,RB/RWB,83,55,70,74,74,76
+Pedri,MID,Spain,Barcelona,23,89,150,,CM/CAM,74,74,89,89,70,70
+Federico Valverde,MID,Uruguay,Real Madrid,28,88,130,,CM/RM/RB/CDM,87,82,84,83,79,84
+Jude Bellingham,MID,England,Real Madrid,23,88,140,,CAM/CM,78,84,83,87,75,83
+Fermín López,MID,Spain,Barcelona,23,82,70,,CAM/CM/LW,76,80,77,80,60,75
+Arda Güler,MID,Türkiye,Real Madrid,21,84,90,,CAM/CM/RW,74,80,85,86,48,58
+Dani Olmo,MID,Spain,Barcelona,28,84,60,,CAM/LW/CM,75,81,82,86,50,66
+Isco,MID,Spain,Real Betis,34,82,8,,CAM/CM,55,76,85,86,55,64
+Álex Baena,MID,Spain,Atlético Madrid,25,84,50,,LM/LW/CAM,78,78,84,84,52,68
+Aurélien Tchouaméni,MID,France,Real Madrid,26,85,75,,CDM/CM/CB,70,70,79,76,84,85
+Martín Zubimendi,MID,Spain,Arsenal,27,85,60,,CDM/CM,65,68,83,80,82,77
+Vinícius Júnior,FWD,Brazil,Real Madrid,26,89,140,,LW/ST,94,84,81,91,29,69
+Raphinha,FWD,Brazil,Barcelona,29,88,90,,LW/RW/RM,89,85,84,87,50,72
+Nico Williams,FWD,Spain,Athletic Club,24,84,60,,LW/RW/LM,92,75,77,86,38,66
+Abde Ezzalzouli,FWD,Morocco,Real Betis,24,80,25,,LW/LM,91,70,70,83,35,64
+Kylian Mbappé,FWD,France,Real Madrid,27,91,180,,ST/LW,96,90,81,92,36,77
+Julián Álvarez,FWD,Argentina,Atlético Madrid,26,87,100,,ST/CF/CAM,83,85,80,85,55,77
+Robert Lewandowski,FWD,Poland,Barcelona,38,85,10,,ST,70,88,76,81,42,78
+Alexander Sørloth,FWD,Norway,Atlético Madrid,30,82,25,,ST,78,82,64,74,40,85
+Lamine Yamal,FWD,Spain,Barcelona,19,90,200,,RW/RM/CAM,87,82,87,92,33,65
+Rodrygo,FWD,Brazil,Real Madrid,25,84,80,,RW/LW/ST,88,80,79,86,35,66
+Antoine Griezmann,FWD,France,Atlético Madrid,35,83,15,,ST/CAM/CF,72,82,84,84,55,70
+Takefusa Kubo,FWD,Japan,Real Sociedad,25,81,35,,RW/RM/CAM,83,74,77,85,40,60
+Alessandro Bastoni,DEF,Italy,Inter,27,86,80,,CB/LB,72,51,80,74,86,82
+Gleison Bremer,DEF,Brazil,Juventus,29,84,50,,CB,78,42,58,63,85,85
+Piero Hincapié,DEF,Ecuador,Inter,24,82,50,,CB/LB,80,48,68,70,82,80
+Nicolò Savona,DEF,Italy,Juventus,23,76,20,,RB/CB/RWB,76,52,66,70,75,76
+Strahinja Pavlović,DEF,Serbia,AC Milan,25,80,30,,CB,71,50,62,62,80,85
+Pierre Kalulu,DEF,France,Juventus,26,81,30,,CB/RB,83,45,66,70,80,78
+Evan Ndicka,DEF,Ivory Coast,Roma,27,81,30,,CB,74,40,63,63,82,81
+Federico Dimarco,DEF,Italy,Inter,28,85,50,,LWB/LB/LM,78,76,84,80,76,71
+Andrea Cambiaso,DEF,Italy,Juventus,26,82,40,,LB/RB/LWB,79,66,78,80,77,74
+Theo Hernández,DEF,France,Al-Hilal,29,84,35,,LB/LWB,89,74,76,80,76,81
+Nuno Tavares,DEF,Portugal,Lazio,26,79,25,,LB/LWB/LM,90,65,76,77,70,76
+Denzel Dumfries,DEF,Netherlands,Inter,30,83,25,,RWB/RB/RM,84,71,72,75,76,84
+Giovanni Di Lorenzo,DEF,Italy,Napoli,33,82,12,,RB/CB/RWB,70,66,75,74,81,80
+Emerson Royal,DEF,Brazil,AC Milan,27,76,12,,RB/RWB,77,58,68,70,74,77
+Nicolò Barella,MID,Italy,Inter,29,86,80,,CM/CAM,78,77,84,85,77,81
+Teun Koopmeiners,MID,Netherlands,Juventus,28,81,40,,CM/CAM/CDM,65,79,81,78,72,76
+Hakan Çalhanoğlu,MID,Türkiye,Inter,32,84,25,,CDM/CM,62,80,87,80,75,72
+Adrien Rabiot,MID,France,AC Milan,31,83,25,,CM/CDM/LM,72,74,78,79,78,82
+Kenan Yıldız,MID,Türkiye,Juventus,21,83,75,,LW/CAM/LM,83,79,77,86,35,67
+Charles De Ketelaere,MID,Belgium,Atalanta,25,82,40,,CAM/CF/ST,76,78,80,82,45,72
+Christian Pulisic,MID,USA,AC Milan,28,84,50,,RM/CAM/RW/LW,84,81,79,86,42,66
+Paulo Dybala,MID,Argentina,Roma,33,81,8,,CAM/CF/RW,72,81,82,86,35,59
+Manuel Locatelli,MID,Italy,Juventus,28,82,25,,CDM/CM,60,70,82,77,79,77
+Stanislav Lobotka,MID,Slovakia,Napoli,31,84,25,,CDM/CM,64,63,84,84,78,72
+Rafael Leão,FWD,Portugal,AC Milan,27,85,70,,LW/ST,92,80,76,87,30,76
+Khvicha Kvaratskhelia,FWD,Georgia,PSG,25,87,140,,LW/RW/LM,86,82,81,89,40,72
+Mattia Zaccagni,FWD,Italy,Lazio,31,81,20,,LW/LM/CAM,84,78,78,84,35,64
+Noa Lang,FWD,Netherlands,Napoli,27,80,25,,LW/LM/RW,86,76,76,85,32,60
+Lautaro Martínez,FWD,Argentina,Inter,29,88,95,,ST/CF,82,88,75,85,49,83
+Dušan Vlahović,FWD,Serbia,Juventus,26,81,35,,ST,78,83,66,77,25,82
+Moise Kean,FWD,Italy,Fiorentina,26,82,45,,ST/LW,87,82,65,79,30,80
+Romelu Lukaku,FWD,Belgium,Napoli,33,79,18,,ST,72,81,71,74,35,85
+Francisco Conceição,FWD,Portugal,Juventus,23,81,45,,RW/RM/LW,88,72,74,86,35,58
+Riccardo Orsolini,FWD,Italy,Bologna,29,82,20,,RW/RM,81,81,77,82,40,66
+Matteo Politano,FWD,Italy,Napoli,33,80,12,,RW/RM/RWB,80,75,78,82,52,62
+Yannick Carrasco,FWD,Belgium,Atalanta,33,77,10,,LW/LWB/LM,80,75,76,81,50,65
+Dayot Upamecano,DEF,France,Bayern Munich,27,85,75,,CB,82,40,68,70,85,84
+Nico Schlotterbeck,DEF,Germany,Dortmund,26,84,55,,CB/LB,76,55,74,70,84,82
+Jonathan Tah,DEF,Germany,Bayern Munich,30,85,30,,CB,70,40,65,63,86,84
+Kim Min-jae,DEF,South Korea,Bayern Munich,29,83,35,,CB,79,35,64,66,84,85
+Castello Lukeba,DEF,France,RB Leipzig,23,81,45,,CB/LB,78,35,69,70,81,77
+Waldemar Anton,DEF,Germany,Dortmund,30,80,25,,CB/RB,70,40,64,63,81,81
+Karim Coulibaly,DEF,Germany,Werder Bremen,18,74,22,,CB,74,30,58,60,74,78
+Alphonso Davies,DEF,Canada,Bayern Munich,25,83,40,,LB/LWB/LM,93,66,75,83,76,76
+David Raum,DEF,Germany,RB Leipzig,28,81,25,,LB/LWB/LM,83,65,79,77,76,73
+Alejandro Grimaldo,DEF,Spain,Leverkusen,31,84,25,,LB/LWB/LM,80,76,84,83,75,66
+Nathaniel Brown,DEF,Germany,Frankfurt,23,79,25,,LB/LWB/LM,87,55,70,75,72,72
+Jeremie Frimpong,DEF,Netherlands,Liverpool,25,82,45,,RB/RWB/RM,94,70,75,83,70,68
+Josip Stanišić,DEF,Croatia,Bayern Munich,26,81,40,,RB/CB/LB,76,50,71,72,80,78
+Willi Orbán,DEF,Hungary,RB Leipzig,33,80,10,,CB,62,48,64,60,82,82
+Rasmus Kristensen,DEF,Denmark,Frankfurt,29,78,12,,RB/RWB/CB,76,58,70,70,76,80
+Aleksandar Pavlović,MID,Germany,Bayern Munich,22,84,90,,CDM/CM,66,66,82,82,79,76
+Felix Nmecha,MID,Germany,Dortmund,25,83,65,,CM/CAM/CDM,76,74,80,83,72,78
+Joshua Kimmich,MID,Germany,Bayern Munich,31,87,50,,CDM/CM/RB,67,72,88,83,82,75
+Angelo Stiller,MID,Germany,Stuttgart,25,83,45,,CDM/CM,62,68,84,80,77,70
+Jamal Musiala,MID,Germany,Bayern Munich,23,88,80,,CAM/LW/CM,84,82,82,92,62,63
+Lennart Karl,MID,Germany,Bayern Munich,18,76,60,,CAM/RW/RM,80,74,74,81,35,53
+Xavi Simons,MID,Netherlands,Tottenham,23,83,65,,CAM/LW/CM,84,77,80,85,50,63
+Leon Goretzka,MID,Germany,Bayern Munich,31,82,15,,CM/CDM,69,77,77,76,77,84
+Rocco Reitz,MID,Germany,Gladbach,24,78,20,,CM/CDM,70,68,75,76,72,74
+Yan Diomande,FWD,Ivory Coast,RB Leipzig,19,79,90,,LW/RW/LM,92,72,69,84,30,64
+Jamie Gittens,FWD,England,Chelsea,22,79,45,,LW/LM/RW,91,73,69,84,28,57
+Karim Adeyemi,FWD,Germany,Dortmund,24,80,35,,LW/ST/RW,94,76,70,81,32,67
+Harry Kane,FWD,England,Bayern Munich,33,89,60,,ST/CF,66,92,84,82,48,82
+Nicolas Jackson,FWD,Senegal,Bayern Munich,25,80,40,,ST/LW,86,78,68,79,34,74
+Serhou Guirassy,FWD,Guinea,Dortmund,30,85,35,,ST,78,86,67,78,36,83
+Hugo Ekitiké,FWD,France,Liverpool,24,85,80,,ST/CF/LW,85,82,74,85,33,74
+Michael Olise,FWD,France,Bayern Munich,24,89,180,,RW/RM/CAM,85,83,87,90,38,64
+Ritsu Dōan,FWD,Japan,Frankfurt,28,80,17,,RW/RM/RWB,80,76,76,82,50,64
+Leroy Sané,FWD,Germany,Galatasaray,30,82,20,,RW/LW/RM,86,79,78,85,35,66
+Brajan Gruda,FWD,Germany,Leipzig,22,77,25,,RW/CAM/LW,82,70,73,81,30,55
+Marquinhos,DEF,Brazil,PSG,32,85,30,,CB/CDM,73,52,74,72,85,78
+Willian Pacho,DEF,Ecuador,PSG,24,86,65,,CB,81,35,66,66,86,84
+Mamadou Sarr,DEF,France,Chelsea,21,76,30,,CB,74,35,60,62,76,77
+Nayef Aguerd,DEF,Morocco,Marseille,30,80,25,,CB,70,45,66,63,80,80
+Lilian Brassier,DEF,France,Rennes,27,76,12,,CB/LB,70,40,65,64,76,78
+Bafodé Diakité,DEF,France,Bournemouth,25,80,35,,CB/RB,78,45,63,65,80,80
+Soungoutou Magassa,DEF,France,West Ham,22,76,18,,CB/CDM,72,45,65,68,76,78
+Nuno Mendes,DEF,Portugal,PSG,24,87,75,,LB/LWB/LM,91,68,79,85,82,78
+Bradley Locko,DEF,France,Brest,24,76,15,,LB/LWB,86,50,66,72,72,72
+Quentin Merlin,DEF,France,Rennes,24,76,18,,LB/LWB/LM,80,58,74,74,72,68
+Lucas Hernández,DEF,France,PSG,30,81,20,,CB/LB,75,50,68,70,82,80
+Achraf Hakimi,DEF,Morocco,PSG,27,89,80,,RB/RWB/RM,91,76,82,83,78,78
+Vanderson,DEF,Brazil,Monaco,25,79,25,,RB/RWB,86,55,70,76,75,76
+Jonathan Clauss,DEF,France,Nice,34,78,8,,RB/RWB/RM,76,66,78,76,70,70
+Vitinha,MID,Portugal,PSG,26,89,140,,CM/CDM,74,78,89,90,74,69
+João Neves,MID,Portugal,PSG,21,88,140,,CM/CDM/RB,78,72,84,88,79,72
+Warren Zaïre-Emery,MID,France,PSG,20,81,70,,CM/RB/CDM,76,70,78,80,74,76
+Khéphren Thuram,MID,France,Juventus,25,82,40,,CM/CDM,78,70,77,82,74,84
+Désiré Doué,MID,France,PSG,21,86,90,,CAM/RW/LW,85,78,80,88,40,66
+Lee Kang-in,MID,South Korea,PSG,25,80,25,,CAM/RW/CM,74,74,82,85,45,58
+Maghnes Akliouche,MID,France,Monaco,24,82,45,,CAM/RW/RM,80,75,79,84,40,62
+Fabián Ruiz,MID,Spain,PSG,30,84,40,,CM/CDM,64,77,85,84,74,73
+Youssouf Fofana,MID,France,AC Milan,27,81,25,,CM/CDM,72,66,76,78,78,80
+Bradley Barcola,FWD,France,PSG,24,84,70,,LW/ST/RW,92,78,75,85,35,64
+Mason Greenwood,FWD,England,Marseille,25,84,50,,RW/ST/LW,82,85,79,85,35,70
+Evann Guessand,FWD,Ivory Coast,Aston Villa,25,79,25,,ST/LW/RW,85,74,70,78,40,78
+Ousmane Dembélé,FWD,France,PSG,29,90,100,,RW/LW/ST,92,87,84,91,40,66
+Gonçalo Ramos,FWD,Portugal,PSG,25,80,40,,ST,78,81,68,76,42,78
+Jonathan David,FWD,Canada,Juventus,26,82,45,,ST/CF,84,82,72,82,38,70
+Elye Wahi,FWD,France,Nice,23,76,20,,ST,84,75,62,76,30,72
+Georginio Rutter,FWD,France,Brighton,24,79,40,,ST/CAM/CF,80,74,74,82,40,74
+Rafik Guitane,FWD,Algeria,Estoril,27,75,8,,RW/CAM,76,72,75,80,35,55
+Moussa Simon,FWD,Nigeria,Paris FC,31,77,10,,LW/LM/RW,87,70,73,80,35,64
+David Raya,GK,Spain,Arsenal,30,90,70,,GK,89,85,87,91,58,88
+Alisson Becker,GK,Brazil,Liverpool,33,88,65,,GK,86,85,85,89,55,90
+Gianluigi Donnarumma,GK,Italy,Man City,27,89,65,,GK,89,82,75,91,52,86
+Jordan Pickford,GK,England,Everton,32,85,45,,GK,84,79,90,86,54,82
+Thibaut Courtois,GK,Belgium,Real Madrid,34,91,80,,GK,88,89,76,92,47,91
+Jan Oblak,GK,Slovenia,Atlético Madrid,33,89,65,,GK,87,88,76,90,50,89
+Joan García,GK,Spain,Barcelona,25,86,55,,GK,86,82,80,88,60,84
+Unai Simón,GK,Spain,Athletic Club,29,86,50,,GK,85,82,84,87,55,84
+Mike Maignan,GK,France,AC Milan,31,88,60,,GK,87,84,88,89,58,85
+Yann Sommer,GK,Switzerland,Inter,37,85,40,,GK,84,82,80,86,48,85
+Mile Svilar,GK,Serbia,Roma,27,85,45,,GK,85,82,78,87,55,82
+Michele Di Gregorio,GK,Italy,Juventus,29,84,40,,GK,84,80,76,86,50,82
+Manuel Neuer,GK,Germany,Bayern Munich,40,87,45,,GK,85,86,90,86,50,89
+Gregor Kobel,GK,Switzerland,Borussia Dortmund,28,88,60,,GK,87,84,82,89,56,86
+Oliver Baumann,GK,Germany,Hoffenheim,36,84,30,,GK,83,81,77,85,45,84
+Péter Gulácsi,GK,Hungary,RB Leipzig,36,84,30,,GK,83,82,75,85,44,85
+Lucas Chevalier,GK,France,PSG,25,86,55,,GK,85,82,82,88,56,84
+Gerónimo Rulli,GK,Argentina,Marseille,34,84,35,,GK,83,81,81,85,48,84
+Brice Samba,GK,France,Rennes,32,83,30,,GK,83,79,76,85,52,80
+Matvey Safonov,GK,Russia,PSG,27,83,30,,GK,83,78,74,85,50,80
