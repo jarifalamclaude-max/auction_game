@@ -216,6 +216,7 @@ label.field input,label.field select,label.field textarea,.inp{background:#0d162
 .voice-btn.talk{box-shadow:0 0 0 2px #22c55e,0 0 14px #22c55e88}
 .voice-btn .vc{font-weight:900}
 #micBtn.muted{border-color:#ef4444}
+.voice-off{border-color:#ef4444;color:#fecaca}
 .vpanel{position:fixed;top:64px;right:12px;z-index:45;width:min(320px,calc(100vw - 24px));background:#0f1a31;border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
 .vp-head{display:flex;justify-content:space-between;align-items:center}
 .vp-list{display:flex;flex-direction:column;gap:6px;margin-top:10px;max-height:50vh;overflow:auto}
@@ -449,6 +450,7 @@ button.fx:hover{border-color:#3d5490}
     <button class="iconbtn room-pill hidden" id="roomBtn" data-action="room" title="Online room"></button>
     <button class="iconbtn voice-btn hidden" id="voiceBtn" data-action="voice" title="Voice chat" aria-label="Voice chat">🎙</button>
     <button class="iconbtn hidden" id="micBtn" data-action="voice-mute" title="Mute" aria-label="Mute or unmute your microphone">🎤</button>
+    <button class="iconbtn voice-off hidden" id="voiceOffBtn" data-action="voice-leave" title="Turn voice chat off" aria-label="Turn voice chat off">📴 <span class="vl">Off</span></button>
     <button class="iconbtn" id="soundBtn" title="Sound on/off" aria-label="Sound on/off">🔊</button>
   </div>
 </header>
@@ -2298,7 +2300,7 @@ function voiceLeave(silent){
   VOICE.stream = null; VOICE.on = false; VOICE.meters = {};
   clearInterval(VOICE.hbT); clearInterval(VOICE.levelT);
   try{ NET.client && NET.client.unsubscribe([NET.topic + "vc/all", NET.topic + "vc/to/" + me.id]); }catch(e){}
-  renderVoice(); if (!silent) toast("You left the voice chat");
+  renderVoice(); if (!silent) toast("🎙 Voice chat is off — tap 🎙 to join again");
 }
 function voiceMute(){
   if (!VOICE.on) return;
@@ -2395,6 +2397,7 @@ function renderVoice(levelsOnly){
   if (!btn) return;
   btn.classList.toggle("hidden", !voiceAvailable());
   mic.classList.toggle("hidden", !VOICE.on);
+  $("#voiceOffBtn").classList.toggle("hidden", !VOICE.on);
   const n = Object.keys(VOICE.people).length + (VOICE.on ? 1 : 0);
   const speaking = VOICE.on && Object.keys(VOICE.meters).some(id => VOICE.meters[id].on);
   btn.className = "iconbtn voice-btn" + (VOICE.on ? " on" : "") + (speaking ? " talk" : "") + (voiceAvailable() ? "" : " hidden");
@@ -2417,7 +2420,7 @@ function renderVoice(levelsOnly){
     '<div class="vp-list">' + row(me.id, voiceName() + " (you)", VOICE.muted, "me") +
     Object.keys(VOICE.people).sort((a, b) => VOICE.people[a].name.localeCompare(VOICE.people[b].name)).map(id => row(id, VOICE.people[id].name, VOICE.people[id].muted, voiceState(id))).join("") + '</div>' +
     (Object.keys(VOICE.people).length ? "" : '<p class="small muted" style="margin:6px 0">Nobody else is in voice yet. Tell your friends to press 🎙.</p>') +
-    '<div class="row" style="margin-top:10px;flex-wrap:nowrap"><button class="btn" style="flex:1" data-action="voice-mute">' + (VOICE.muted ? "🎤 Unmute" : "🔇 Mute") + '</button><button class="btn danger" style="flex:1" data-action="voice-leave">Leave</button></div>';
+    '<div class="row" style="margin-top:10px;flex-wrap:nowrap"><button class="btn" style="flex:1" data-action="voice-mute">' + (VOICE.muted ? "🎤 Unmute" : "🔇 Mute") + '</button><button class="btn danger" style="flex:1" data-action="voice-leave">📴 Turn voice off</button></div>';
 }
 window.addEventListener("pagehide", () => { if (VOICE.on) pub("vc/all", { t: "bye", id: me.id }); });
 
