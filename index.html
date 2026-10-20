@@ -224,7 +224,9 @@ label.field input,label.field select,label.field textarea,.inp{background:#0d162
 .vp-nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .vp-dot{width:10px;height:10px;border-radius:50%;background:#334155;flex:none;transition:background .1s}
 .vp-dot.on{background:#22c55e;box-shadow:0 0 8px #22c55e}
-@media (max-width:560px){ .voice-btn .vl{display:none} .vpanel{top:100px} }
+@media (max-width:560px){ .voice-btn .vl{display:none} }
+@media (max-width:1180px){ .head-right .stat{display:none} .voice-off .vl{display:none} }
+@media (max-width:900px){ header{flex-wrap:wrap;row-gap:4px} nav{order:3;flex:1 0 100%} nav button{flex:1;padding:8px 4px} .head-right{margin-left:auto} }
 
 /* ---------- squad management (FC-style) ---------- */
 .team-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 24px 10px 2px;margin-bottom:6px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
@@ -1232,7 +1234,18 @@ function shortName(n){
 }
 
 /* ---------- condition (fitness / form) during the league ---------- */
-function cond(pid){ const c = state && state.league && state.league.cond && state.league.cond[pid]; return c ? c : { fit: 100, form: 0 }; }
+let preCache = { key: null, cond: null };
+function preCond(){   // fitness/form from before the live matchday (so nothing gives the result away)
+  const L = state && state.league; if (!L || !liveReveal()) return null;
+  if (L.preCond) return L.preCond;
+  if (!L.prev) return null;
+  if (preCache.key !== L.prev){ try{ preCache = { key: L.prev, cond: JSON.parse(L.prev).cond || {} }; }catch(e){ preCache = { key: L.prev, cond: null }; } }
+  return preCache.cond;
+}
+function cond(pid){
+  const pre = preCond(), src = pre || (state && state.league && state.league.cond), c = src && src[pid];
+  return c ? c : { fit: 100, form: 0 };
+}
 function fitColor(f){ return f >= 75 ? "#22c55e" : f >= 55 ? "#f59e0b" : "#ef4444"; }
 
 /* ---------- positions & chemistry ---------- */
@@ -1498,6 +1511,7 @@ function startLeague(){
 }
 function playMatchday(){
   if (!isHost()) return;
+  if (state.room && NET.status !== "online" && !confirm("You're offline right now, so your friends won't see this matchday live. Play it anyway?")) return;
   const L = state.league; if (!L || L.status !== "running") return;
   const md = L.played, fx = L.fixtures[md]; if (!fx) return;
   const missing = fx.filter(([h, a]) => !teamById(h) || !teamById(a));
@@ -1943,6 +1957,7 @@ function loadMqtt(){
 }
 function setNetStatus(s){
   NET.status = s; renderRoomUI(); renderVoice();
+  if (isHost() && prefs.view === "league" && !liveReveal()) renderLeague();
   if (role === "player"){ if (prefs.view === "join") renderJoin(); else if (state && state.current && prefs.view === "auction") renderBidPanel(); }
 }
 async function netConnect(code, onReady, will){
@@ -2028,7 +2043,8 @@ function netPublishState(){
 function leagueMeta(){
   const L = state && state.league;
   if (!L || !L.fixtures) return { none: true, season: L ? L.season : 0 };
-  return { lid: L.lid, season: L.season, status: L.status, fixtures: L.fixtures, played: L.played, cond: L.cond, stats: L.stats, reveal: L.reveal, canUndo: !!L.prev };
+  let preCond = null; if (L.reveal && L.prev){ try{ preCond = JSON.parse(L.prev).cond; }catch(e){} }
+  return { lid: L.lid, season: L.season, status: L.status, fixtures: L.fixtures, played: L.played, cond: L.cond, stats: L.stats, reveal: L.reveal, canUndo: !!L.prev, preCond };
 }
 function publishLeague(mds){
   if (!isHost() || !NET.client || !state) return;
@@ -2068,7 +2084,7 @@ function hostOnMessage(sub, m){
   if (!hostActive) return;
   if (sub === "hb"){   // another device started running this same room more recently: step aside
     if (m.sid && m.sid !== HOST_SID && m.started > HOST_START){
-      hostActive = false; netDisconnect();
+      voiceLeave(true); VOICE.open = false; hostActive = false; netDisconnect();
       openModal('<h2>Auction opened on another device</h2><p class="muted">This room is now being run from another tab or device, so this one is paused.</p><button class="btn primary" data-action="take-tab">Run it from here instead</button>', true);
     }
     return;
@@ -2147,16 +2163,22 @@ function assembleLeague(){
   if (!m || m.none) return m ? { season: m.season } : null;
   const results = [];
   for (let i = 0; i < m.played; i++){ const r = mirrorLeague.res[m.lid + ":" + i]; if (!r) break; results.push(r); }
-  return { lid: m.lid, season: m.season, status: m.status, fixtures: m.fixtures, played: results.length, results, cond: m.cond || {}, stats: m.stats || {}, reveal: m.reveal, prev: m.canUndo ? "1" : null };
+  return { lid: m.lid, season: m.season, status: m.status, fixtures: m.fixtures, played: results.length, results, cond: m.cond || {}, stats: m.stats || {}, reveal: m.reveal, prev: m.canUndo ? "1" : null, preCond: m.preCond || null };
+}
+function maybePullLive(){
+  const r = role === "player" && state && state.league && liveReveal(); if (!r) return;
+  const key = state.league.lid + ":" + r.md + ":" + r.at;
+  if (ui.livePulled === key || prefs.view === "join" || ui.picking) return;
+  ui.livePulled = key; closeModal(); if (prefs.view !== "league") setView("league"); window.scrollTo(0, 0);
 }
 function applyMirrorLeague(){
   if (!state) return;
   const before = state.league, after = assembleLeague();
   state.league = after;
   const r = after && after.reveal, wasLive = before && before.reveal && after && before.lid === after.lid && before.reveal.md === (r && r.md) && before.reveal.at === (r && r.at);
-  if (r && !wasLive && liveReveal() && prefs.view !== "join" && !ui.picking){ closeModal(); if (prefs.view !== "league") setView("league"); window.scrollTo(0, 0); }
+  maybePullLive();
   if (prefs.view === "league") renderLeague();
-  else if (prefs.view === "teams") renderTeams();
+  else if (prefs.view === "teams" && !(document.activeElement && document.activeElement.closest && document.activeElement.closest("#teamsBody select"))) renderTeams();
 }
 function playerOnMessage(sub, m, retained, raw){
   if (sub === "lg"){ if (m.code === joinCode){ mirrorLeague.meta = m; if (!retained && m.hostNow) clockOffset = m.hostNow - Date.now(); applyMirrorLeague(); } return; }
@@ -2190,7 +2212,6 @@ function playerOnMessage(sub, m, retained, raw){
     if (!retained){ clockOffset = m.hostNow - Date.now(); markHostAlive(); }
     if (m.sid === NET.lastSid && m.seq <= NET.lastSeq) return;
     NET.lastSeq = m.seq; NET.lastSid = m.sid; NET.moved = null; NET.notFound = false; clearTimeout(NET.findT);
-    if (retained && !NET.lastHb) clockOffset = m.hostNow - Date.now();   // best guess until the master answers
     NET.online = new Set(m.online || []);
     const prev = state;
     const hadTeam = prev && myTeam();
@@ -2223,6 +2244,7 @@ function playerOnMessage(sub, m, retained, raw){
     if (nowTeam && (!hadTeam || hadTeam.id !== nowTeam.id) && (ui.claiming || ui.picking)){ toast("You are " + nowTeam.name + " ✓"); ui.claiming = null; ui.picking = false; }
     if (!prev) restartPrefetch();
     renderAll();
+    maybePullLive();
   }
 }
 function playerBid(){
@@ -2264,11 +2286,19 @@ async function voiceJoin(){
   if (NET.status !== "online" || !NET.client){ toast("Voice works once you are 🟢 Live in the room", true); return; }
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.RTCPeerConnection){ toast("This browser can't use the microphone here — open the game from its https link in Chrome or Safari", true); return; }
   VOICE.joining = true; renderVoice();
-  try{ VOICE.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }, video: false }); }
-  catch(e){ VOICE.joining = false; renderVoice(); toast("Microphone not allowed — tap the 🔒 next to the address bar, allow the microphone, and try again", true); return; }
-  VOICE.joining = false; VOICE.on = true; VOICE.muted = false; VOICE.people = {};
+  const gum = navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }, video: false });
+  try{ VOICE.stream = await Promise.race([gum, new Promise((_, rej) => setTimeout(() => rej(Object.assign(new Error("timeout"), { name: "Timeout" })), 20000))]); }
+  catch(e){
+    gum.then(st => { if (!VOICE.on || VOICE.stream !== st) st.getTracks().forEach(t => t.stop()); }).catch(() => {});
+    VOICE.joining = false;
+    if (e.name === "Timeout"){ renderVoice(); toast("Answer the browser's microphone question (top of the screen), then press Join voice again", true); return; }
+    const msg = e.name === "NotFoundError" ? "No microphone found on this device." : e.name === "NotReadableError" || e.name === "AbortError" ? "Your microphone is busy (another app or call is using it)." : "Microphone not allowed — tap the 🔒 next to the address bar and allow the microphone.";
+    if (e.name === "NotAllowedError" || e.name === "SecurityError" || !confirm(msg + "\n\nJoin anyway and just listen?")){ renderVoice(); if (e.name === "NotAllowedError" || e.name === "SecurityError") toast(msg + " Then try again.", true); return; }
+    VOICE.stream = null;   // listen only
+  }
+  VOICE.joining = false; VOICE.on = true; VOICE.muted = false; VOICE.people = {}; VOICE.sid = rid(8);
   try{ VOICE.actx = VOICE.actx || new (window.AudioContext || window.webkitAudioContext)(); VOICE.actx.resume && VOICE.actx.resume(); }catch(e){}
-  voiceMeter(me.id, VOICE.stream);
+  if (VOICE.stream) voiceMeter(me.id, VOICE.stream); else VOICE.muted = true;
   voiceSubscribe();
   VOICE.hbT = setInterval(voiceHeartbeat, 5000);
   VOICE.levelT = setInterval(voiceLevels, 200);
@@ -2277,16 +2307,18 @@ async function voiceJoin(){
 }
 function voiceSubscribe(){
   if (!VOICE.on || !NET.client) return;
+  Object.values(VOICE.people).forEach(p => p.seen = Date.now());
   NET.client.subscribe(NET.topic + "vc/all", { qos: 0 });
   NET.client.subscribe(NET.topic + "vc/to/" + me.id, { qos: 1 });
   voiceAnnounce(true);
 }
-function voiceAnnounce(hello){ pub("vc/all", { t: "here", id: me.id, name: voiceName(), muted: VOICE.muted, hello: !!hello }); }
+function voiceAnnounce(hello){ pub("vc/all", { t: "here", id: me.id, sid: VOICE.sid, name: voiceName(), muted: VOICE.muted || !VOICE.stream, hello: !!hello }); }
 function voiceHeartbeat(){
   if (!VOICE.on) return;
   voiceAnnounce(false);
   const t = Date.now();
-  Object.keys(VOICE.people).forEach(id => { if (t - VOICE.people[id].seen > 16000) voiceDrop(id); });
+  if (NET.status !== "online") return;   // can't hear heartbeats right now; running calls keep going
+  Object.keys(VOICE.people).forEach(id => { const pc = VOICE.peers[id]; if (t - VOICE.people[id].seen > 16000 && !(pc && pc.connectionState === "connected")) voiceDrop(id); });
   // retry broken links (only the side with the smaller id starts a call)
   Object.keys(VOICE.people).forEach(id => { const pc = VOICE.peers[id]; if ((!pc || ["failed","closed"].includes(pc.connectionState)) && me.id < id){ voiceDrop(id, true); voiceCall(id); } });
   renderVoice();
@@ -2304,6 +2336,7 @@ function voiceLeave(silent){
 }
 function voiceMute(){
   if (!VOICE.on) return;
+  if (!VOICE.stream){ toast("You're listening only (no microphone)", true); return; }
   VOICE.muted = !VOICE.muted;
   VOICE.stream.getAudioTracks().forEach(t => t.enabled = !VOICE.muted);
   voiceAnnounce(false); renderVoice();
@@ -2317,7 +2350,8 @@ function voiceDrop(id, keepPerson){
 function voicePeer(id){
   const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
   pc._pending = []; pc._remoteSet = false;
-  VOICE.stream.getTracks().forEach(t => pc.addTrack(t, VOICE.stream));
+  if (VOICE.stream) VOICE.stream.getTracks().forEach(t => pc.addTrack(t, VOICE.stream));
+  else pc.addTransceiver("audio", { direction: "recvonly" });   // listen only
   pc.onicecandidate = e => { if (e.candidate) pub("vc/to/" + id, { t: "ice", from: me.id, c: e.candidate.toJSON() }); };
   pc.ontrack = e => {
     const s = e.streams[0] || new MediaStream([e.track]);
@@ -2325,7 +2359,13 @@ function voicePeer(id){
     pc._audio.srcObject = s; pc._audio.play().catch(() => {});
     voiceMeter(id, s);
   };
-  pc.onconnectionstatechange = () => renderVoice();
+  pc.onconnectionstatechange = () => {
+    if (pc.connectionState === "failed" && !pc._restarted && me.id < id && pc.restartIce){
+      pc._restarted = true;
+      pc.createOffer({ iceRestart: true }).then(o => pc.setLocalDescription(o)).then(() => pub("vc/to/" + id, { t: "offer", from: me.id, sid: VOICE.sid, restart: true, sdp: pc.localDescription.toJSON() })).catch(() => {});
+    }
+    renderVoice();
+  };
   VOICE.peers[id] = pc;
   return pc;
 }
@@ -2342,17 +2382,22 @@ async function voiceOnMessage(sub, m){
     if (m.t === "bye"){ voiceDrop(m.id); return; }
     if (m.t !== "here") return;
     const known = VOICE.people[m.id];
-    VOICE.people[m.id] = { name: String(m.name || "Guest").slice(0, 40), muted: !!m.muted, seen: Date.now() };
+    if (known && known.sid && m.sid && known.sid !== m.sid) voiceDrop(m.id, true);   // he rejoined (e.g. reloaded): replace the old link
+    VOICE.people[m.id] = { name: String(m.name || "Guest").slice(0, 40), muted: !!m.muted, seen: Date.now(), sid: m.sid };
     if (m.hello) voiceAnnounce(false);                         // let the newcomer know we're here
     if (!VOICE.peers[m.id] && me.id < m.id) voiceCall(m.id);    // exactly one side starts the call
-    if (!known) toast("🎙 " + VOICE.people[m.id].name + " joined voice");
+    if (!known && !VOICE.open) toast("🎙 " + VOICE.people[m.id].name + " joined voice");
     renderVoice();
     return;
   }
   if (sub !== "vc/to/" + me.id || !m.from) return;
   const from = m.from;
   try{
-    if (m.t === "offer"){
+    if (m.t === "offer" && m.restart && VOICE.peers[from]){   // ICE restart on an existing link
+      const pc = VOICE.peers[from];
+      await pc.setRemoteDescription(m.sdp); await pc.setLocalDescription(await pc.createAnswer());
+      pub("vc/to/" + from, { t: "answer", from: me.id, sid: VOICE.sid, restart: true, sdp: pc.localDescription.toJSON() });
+    } else if (m.t === "offer"){
       if (VOICE.peers[from]) voiceDrop(from, true);
       const pc = voicePeer(from);
       await pc.setRemoteDescription(m.sdp); await voiceFlush(pc);
@@ -2360,7 +2405,7 @@ async function voiceOnMessage(sub, m){
       pub("vc/to/" + from, { t: "answer", from: me.id, sdp: pc.localDescription.toJSON() });
       if (!VOICE.people[from]) VOICE.people[from] = { name: "…", muted: false, seen: Date.now() };
     } else if (m.t === "answer"){
-      const pc = VOICE.peers[from]; if (pc && !pc._remoteSet){ await pc.setRemoteDescription(m.sdp); await voiceFlush(pc); }
+      const pc = VOICE.peers[from]; if (pc && (!pc._remoteSet || m.restart)){ await pc.setRemoteDescription(m.sdp); await voiceFlush(pc); }
     } else if (m.t === "ice" && m.c){
       const pc = VOICE.peers[from]; if (!pc) return;
       if (pc._remoteSet) await pc.addIceCandidate(m.c).catch(() => {}); else pc._pending.push(m.c);
@@ -2378,14 +2423,15 @@ function voiceMeter(id, stream){
   }catch(e){}
 }
 function voiceLevels(){
-  let changed = false;
+  const t = Date.now(); let any = false;
   Object.keys(VOICE.meters).forEach(id => {
     const m = VOICE.meters[id]; m.an.getByteTimeDomainData(m.buf);
     let s = 0; for (let i = 0; i < m.buf.length; i++){ const v = (m.buf[i] - 128) / 128; s += v * v; }
-    const on = Math.sqrt(s / m.buf.length) > .04 && !(id === me.id && VOICE.muted);
-    if (on !== m.on){ m.on = on; changed = true; }
+    if (Math.sqrt(s / m.buf.length) > .04 && !(id === me.id && VOICE.muted)) m.until = t + 400;
+    m.on = (m.until || 0) > t; any = any || m.on;
+    const d = document.querySelector('#voicePanel .vp-dot[data-vid="' + id + '"]'); if (d) d.classList.toggle("on", m.on);
   });
-  if (changed) renderVoice(true);
+  const b = $("#voiceBtn"); if (b) b.classList.toggle("talk", VOICE.on && any);
 }
 function voiceState(id){
   const pc = VOICE.peers[id]; if (!pc) return "connecting";
@@ -2406,6 +2452,7 @@ function renderVoice(levelsOnly){
   const box = $("#voicePanel");
   if (!VOICE.open){ box.classList.add("hidden"); return; }
   box.classList.remove("hidden");
+  box.style.top = Math.round($("header").getBoundingClientRect().bottom + 6) + "px";
   if (!VOICE.on){
     box.innerHTML = '<div class="vp-head"><b>🎙 Voice chat</b><button class="iconbtn" data-action="voice-close" aria-label="Close">✕</button></div>' +
       '<p class="small muted" style="margin:6px 0 10px">Talk with everyone in this room at any time. Your browser will ask to use the microphone.</p>' +
@@ -2414,7 +2461,7 @@ function renderVoice(levelsOnly){
     return;
   }
   const row = (id, name, muted, st) => { const m = VOICE.meters[id], on = m && m.on;
-    return '<div class="vp-row"><span class="vp-dot' + (on ? " on" : "") + '"></span><span class="vp-nm">' + esc(name) + '</span>' +
+    return '<div class="vp-row"><span class="vp-dot' + (on ? " on" : "") + '" data-vid="' + esc(id) + '"></span><span class="vp-nm">' + esc(name) + '</span>' +
       (muted ? '<span title="Muted">🔇</span>' : "") + (st === "ok" || st === "me" ? "" : st === "failed" ? '<span class="small" style="color:#f87171" title="Your networks could not connect directly">can\'t connect</span>' : '<span class="small muted">connecting…</span>') + '</div>'; };
   box.innerHTML = '<div class="vp-head"><b>🎙 Voice chat</b><button class="iconbtn" data-action="voice-close" aria-label="Close">✕</button></div>' +
     '<div class="vp-list">' + row(me.id, voiceName() + " (you)", VOICE.muted, "me") +
@@ -2429,7 +2476,7 @@ function claimHostTab(){ try{ localStorage.setItem(KEY_TAB, TAB_ID); }catch(e){}
 window.addEventListener("storage", e => {
   if (!isHost()) return;
   if (e.key === KEY_TAB && e.newValue && e.newValue !== TAB_ID && hostActive){
-    hostActive = false; netDisconnect();
+    voiceLeave(true); VOICE.open = false; hostActive = false; netDisconnect();
     openModal('<h2>Auction opened in another tab</h2><p class="muted">To keep things in sync, only one tab can run the auction. This tab is paused.</p><button class="btn primary" data-action="take-tab">Use this tab instead</button>', true);
   } else if (e.key === KEY_STATE && hostActive){
     state = upgradeState(load(KEY_STATE, null)); indexPlayers(); undoStack = []; ui.nextBid = null; ui.renderedCard = null;
@@ -2481,6 +2528,7 @@ function renderAll(){
   renderRoomUI();
 }
 function renderHeader(){
+  renderVoice();
   $("#soundBtn").textContent = prefs.sound ? "🔊" : "🔇";
   if (!state || !state.players){ $("#headStat").textContent = ""; return; }
   $("#headStat").textContent = "Round " + state.round + " · Sold " + state.sales.length + "/" + state.players.length + " · Left " + availablePlayers().length;
@@ -2825,7 +2873,7 @@ function playerInfoHTML(p, t){
     '<div class="small" style="margin-top:4px">Positions: <b>' + p.pos.join(" / ") + '</b></div>' +
     '<div class="faces">' + p.st.map((v, i) => '<div><span>' + labels[i] + '</span><b>' + v + '</b></div>').join("") + '</div>' +
     '<div class="small">Fitness <b style="color:' + fitColor(c.fit) + '">' + c.fit + '%</b> · Form <b>' + (c.form > 0 ? "+" : "") + c.form + '</b></div>' +
-    (s ? '<div class="small muted">League: ' + s.apps + ' apps · ' + s.g + ' goals · ' + s.a + ' assists · avg ' + (s.apps ? (s.rs / s.apps).toFixed(1) : "–") + '</div>' : "") +
+    (s && liveReveal() ? '<div class="small muted">League stats update at full time</div>' : s ? '<div class="small muted">League: ' + s.apps + ' apps · ' + s.g + ' goals · ' + s.a + ' assists · avg ' + (s.apps ? (s.rs / s.apps).toFixed(1) : "–") + '</div>' : "") +
   '</div></div></div>';
 }
 /* tap-to-swap / drag-and-drop between pitch slots ("s<i>") and the bench ("p<playerId>") */
@@ -2894,8 +2942,8 @@ function renderLeagueInner(){
   const rows = standings(), total = L.fixtures.length, next = L.fixtures[L.played];
   const live = !!liveReveal();
   let html = '<div class="panel league-top"><div><h2 style="margin:0">🏆 League · Season ' + (L.season || 1) + '</h2><div class="small muted">' + (L.status === "done" && !live ? "Finished" : "Matchday " + Math.min(L.played + (live ? 0 : 1), total) + " of " + total) + '</div></div>' +
-    (isHost() ? '<div class="row">' + (L.status === "running" ? '<button class="btn primary big" data-action="league-play" ' + (live ? "disabled" : "") + '>▶ Play matchday ' + (L.played + 1) + '</button>' : "") +
-      (L.played && L.prev && !live ? '<button class="btn ghost" data-action="league-undo">↶ Undo last matchday</button>' : "") + '<button class="btn ghost" data-action="league-reset">New season</button></div>' : "") + '</div>';
+    (isHost() ? '<div class="row">' + (L.status === "running" ? '<button class="btn primary big" data-action="league-play" ' + (live ? "disabled" : "") + '>▶ Play matchday ' + (L.played + 1) + '</button>' + (state.room && NET.status !== "online" ? '<span class="small" style="color:#fbbf24">Offline — friends won\'t see it live</span>' : "") : "") +
+      (L.played && L.prev && !live ? '<button class="btn ghost" data-action="league-undo">↶ Undo last matchday</button>' : "") + '' + (!live ? '<button class="btn ghost" data-action="league-reset">New season</button>' : "") + '</div>' : "") + '</div>';
   if (L.status === "done" && !live){
     const champ = rows[0] && rows[0].t;
     html += '<div class="panel champ" style="--tc:' + readable(champ.color) + '"><div style="font-size:48px">🏆</div><div><div class="small muted">Champions</div><h2 style="margin:0;color:' + readable(champ.color) + '">' + esc(champ.name) + '</h2>' + (champ.owner ? '<div class="small">' + teamLabel(champ) + '</div>' : "") + '</div></div>';
@@ -2958,6 +3006,7 @@ setInterval(() => {
     if (lastLiveGoals >= 0 && goals > lastLiveGoals) sfx("bid");
     lastLiveGoals = goals;
   }
+  if (isHost() && state.league.reveal && !r && now() > state.league.reveal.at){ state.league.reveal = null; persist(); publishLeague(); }
   if (liveWas && !r){   // full time
     lastLiveGoals = -1;
     if (prefs.view === "league") renderLeague();
@@ -3320,14 +3369,15 @@ document.addEventListener("click", e => {
     case "league-start": startLeague(); break;
     case "league-play": playMatchday(); break;
     case "league-undo": undoMatchday(); break;
-    case "league-skip": { const L = state.league; if (L && L.reveal){ L.reveal.at = Date.now() - (L.reveal.dur || REVEAL_MS); persist(); publishLeague(); renderLeague(); } break; }
+    case "league-skip": { const L = state.league; if (L && L.reveal){ L.reveal = null; persist(); publishLeague(); renderLeague(); } break; }
     case "league-wipe": state.league = { season: 1 }; persist(); publishLeague(); renderAll(); break;
-    case "league-reset": if (confirm("Start a new season? The table, results and players' fitness are reset. Squads stay the same.")){ const n = state.league && state.league.results ? state.league.results.length : 0; state.league = { season: (state.league && state.league.season) || 1 }; persist(); for (let i = 0; i < n; i++) clearLeagueResult(i); publishLeague(); renderAll(); } break;
+    case "league-reset": if (liveReveal()) break; if (confirm("Start a new season? The table, results and players' fitness are reset. Squads stay the same.")){ const n = state.league && state.league.results ? state.league.results.length : 0; state.league = { season: (state.league && state.league.season) || 1 }; persist(); for (let i = 0; i < n; i++) clearLeagueResult(i); publishLeague(); renderAll(); } break;
     case "host-claim": { const t = teamById(a.dataset.team); if (!t) break; if (t.owner && t.owner.id !== me.id){ toast(t.name + " is already taken by " + t.owner.name, true); openRoom(); break; } state.teams.forEach(x => { if (x.owner && x.owner.id === me.id) x.owner = null; }); t.owner = { id: me.id, name: "Master" }; persist(); renderAll(); openRoom(); break; }
     case "switch-server": {
       if (!confirm("Move the room to another free server? The room code changes and friends must join again with the new link.")) break;
       const cur = +state.room.code.slice(-1) || 0, nxt = (cur + 1) % BROKERS.length;
       const newCode = newRoomCode(nxt);
+      if (VOICE.on) toast("Voice was turned off — everyone joins voice again in the new room", true);
       voiceLeave(true); closeRoomTopic(newCode);
       state.room = { code: newCode }; state.teams.forEach(t => { if (t.owner && t.owner.id !== me.id) t.owner = null; });
       persist(); closeModal(); hostStartNet(); renderAll(); toast("New room code: " + state.room.code); break;
@@ -3356,7 +3406,7 @@ document.addEventListener("click", e => {
     }
     case "reset":
       if (!confirm("Start a new auction? All teams, bids and sales will be cleared and the room code changes.\n(Tip: download a backup first.)")) break;
-      voiceLeave(true); closeRoomTopic(null); state = null; undoStack = []; prefetchGen++; prefetchStarted = false; try{ localStorage.removeItem(KEY_STATE); }catch(e){}
+      voiceLeave(true); VOICE.open = false; closeRoomTopic(null); state = null; undoStack = []; prefetchGen++; prefetchStarted = false; try{ localStorage.removeItem(KEY_STATE); }catch(e){}
       setView("setup"); renderHeader(); break;
   }
 });
