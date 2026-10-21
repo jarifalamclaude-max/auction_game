@@ -1597,7 +1597,8 @@ function normalizeState(s){
   const pm = st.posMax && typeof st.posMax === "object" ? st.posMax : {};
   const settings = { currency: typeof st.currency === "string" ? st.currency : "M", squadMax: int(st.squadMax, 15, 1), increment: isFinite(+st.increment) && +st.increment > 0 ? +st.increment : 5,
     timer: int(st.timer, 0, 0), order: ["random","pos","posrev","price","list"].includes(st.order) ? st.order : "random",
-    posMax: { GK: int(pm.GK, 0, 0), DEF: int(pm.DEF, 0, 0), MID: int(pm.MID, 0, 0), FWD: int(pm.FWD, 0, 0) } };
+    posMax: { GK: int(pm.GK, 0, 0), DEF: int(pm.DEF, 0, 0), MID: int(pm.MID, 0, 0), FWD: int(pm.FWD, 0, 0) },
+    turn: st.turn && typeof st.turn === "object" && typeof st.turn.urls === "string" ? { urls: st.turn.urls.slice(0, 500), user: String(st.turn.user || "").slice(0, 200), pass: String(st.turn.pass || "").slice(0, 200) } : null };
   const sales = (Array.isArray(s.sales) ? s.sales : []).filter(x => x && pids.has(x.playerId) && tids.has(x.teamId) && isFinite(+x.price)).map(x => Object.assign({}, x, { price: +x.price }));
   const status = {};
   if (s.status && typeof s.status === "object") Object.keys(s.status).forEach(id => { if (pids.has(id) && ["sold","unsold"].includes(s.status[id])) status[id] = s.status[id]; });
@@ -2277,7 +2278,17 @@ setInterval(() => {   // friends: notice when the master disappears
    Voice chat: audio goes straight between browsers (WebRTC);
    the room's MQTT channel is only used so the browsers can find each other.
    ========================================================= */
-const ICE_SERVERS = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302", "stun:stun.cloudflare.com:3478"] }];
+/* STUN finds a direct path; when phone networks block that (very common on mobile data), audio goes through a TURN relay.
+   The master can paste their own free TURN account in Settings → Voice relay; it is shared with everyone in the room. */
+const STUN = { urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302", "stun:stun.cloudflare.com:3478"] };
+const PUBLIC_TURN = { urls: ["turn:openrelay.metered.ca:80", "turn:openrelay.metered.ca:443", "turn:openrelay.metered.ca:443?transport=tcp"], username: "openrelayproject", credential: "openrelayproject" };
+function turnConfig(){ const t = state && state.settings && state.settings.turn; return t && t.urls ? t : null; }
+function iceServers(){
+  const t = turnConfig();
+  if (!t) return [STUN, PUBLIC_TURN];
+  const urls = String(t.urls).split(/[\s,]+/).filter(u => /^turns?:/i.test(u));
+  return urls.length ? [STUN, { urls, username: t.user || "", credential: t.pass || "" }] : [STUN, PUBLIC_TURN];
+}
 const VOICE = { on: false, joining: false, muted: false, stream: null, peers: {}, people: {}, hbT: null, levelT: null, actx: null, meters: {}, open: false };
 function voiceName(){ return isHost() ? "Master" + (myTeam() ? " · " + myTeam().name : "") : (me.name || "Guest") + (myTeam() ? " · " + myTeam().name : ""); }
 function voiceAvailable(){ return !!(isHost() ? state && state.room : joinCode); }
@@ -2319,8 +2330,17 @@ function voiceHeartbeat(){
   const t = Date.now();
   if (NET.status !== "online") return;   // can't hear heartbeats right now; running calls keep going
   Object.keys(VOICE.people).forEach(id => { const pc = VOICE.peers[id]; if (t - VOICE.people[id].seen > 16000 && !(pc && pc.connectionState === "connected")) voiceDrop(id); });
-  // retry broken links (only the side with the smaller id starts a call)
-  Object.keys(VOICE.people).forEach(id => { const pc = VOICE.peers[id]; if ((!pc || ["failed","closed"].includes(pc.connectionState)) && me.id < id){ voiceDrop(id, true); voiceCall(id); } });
+  // links that aren't up after 15 s are retried (lost messages, blocked networks)
+  Object.keys(VOICE.people).forEach(id => {
+    const pc = VOICE.peers[id], p = VOICE.people[id];
+    const up = pc && (pc.connectionState === "connected" || pc.iceConnectionState === "connected" || pc.iceConnectionState === "completed");
+    if (up) return;
+    const stale = !pc || ["failed","closed"].includes(pc.connectionState) || t - pc._t0 > 15000;
+    if (!stale) return;
+    if (pc && t - pc._t0 > 15000) p.fails = (p.fails || 0) + 1;
+    if (me.id < id){ voiceDrop(id, true); voiceCall(id); }                                        // I make the calls to him
+    else if (t - (p.askedAt || 0) > 9000){ p.askedAt = t; pub("vc/to/" + id, { t: "callme", from: me.id, sid: VOICE.sid }); }   // ask him to call me again
+  });
   renderVoice();
 }
 function voiceLeave(silent){
@@ -2348,8 +2368,8 @@ function voiceDrop(id, keepPerson){
   if (!keepPerson){ delete VOICE.people[id]; renderVoice(); }
 }
 function voicePeer(id){
-  const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
-  pc._pending = []; pc._remoteSet = false;
+  const pc = new RTCPeerConnection({ iceServers: iceServers(), iceTransportPolicy: params.get("relayOnly") ? "relay" : "all" });
+  pc._pending = []; pc._remoteSet = false; pc._t0 = Date.now();
   if (VOICE.stream) VOICE.stream.getTracks().forEach(t => pc.addTrack(t, VOICE.stream));
   else pc.addTransceiver("audio", { direction: "recvonly" });   // listen only
   pc.onicecandidate = e => { if (e.candidate) pub("vc/to/" + id, { t: "ice", from: me.id, c: e.candidate.toJSON() }); };
@@ -2360,6 +2380,15 @@ function voicePeer(id){
     voiceMeter(id, s);
   };
   pc.onconnectionstatechange = () => {
+    if (pc.connectionState === "connected"){
+      const p = VOICE.people[id]; if (p) p.fails = 0;
+      pc.getStats().then(st => {
+        let pair = null; st.forEach(r => { if (r.type === "transport" && r.selectedCandidatePairId) pair = st.get(r.selectedCandidatePairId); });
+        if (!pair) st.forEach(r => { if (r.type === "candidate-pair" && r.state === "succeeded" && (r.nominated || r.selected)) pair = r; });
+        const lc = pair && st.get(pair.localCandidateId), rc = pair && st.get(pair.remoteCandidateId);
+        pc._via = (lc && lc.candidateType === "relay") || (rc && rc.candidateType === "relay") ? "relay" : "direct"; renderVoice();
+      }).catch(() => {});
+    }
     if (pc.connectionState === "failed" && !pc._restarted && me.id < id && pc.restartIce){
       pc._restarted = true;
       pc.createOffer({ iceRestart: true }).then(o => pc.setLocalDescription(o)).then(() => pub("vc/to/" + id, { t: "offer", from: me.id, sid: VOICE.sid, restart: true, sdp: pc.localDescription.toJSON() })).catch(() => {});
@@ -2392,6 +2421,11 @@ async function voiceOnMessage(sub, m){
   }
   if (sub !== "vc/to/" + me.id || !m.from) return;
   const from = m.from;
+  if (m.t === "callme"){
+    const pc = VOICE.peers[from];
+    if (!(pc && pc.connectionState === "connected")){ voiceDrop(from, true); voiceCall(from); }
+    return;
+  }
   try{
     if (m.t === "offer" && m.restart && VOICE.peers[from]){   // ICE restart on an existing link
       const pc = VOICE.peers[from];
@@ -2434,9 +2468,10 @@ function voiceLevels(){
   const b = $("#voiceBtn"); if (b) b.classList.toggle("talk", VOICE.on && any);
 }
 function voiceState(id){
-  const pc = VOICE.peers[id]; if (!pc) return "connecting";
-  const s = pc.connectionState || pc.iceConnectionState;
-  return s === "connected" || s === "completed" ? "ok" : s === "failed" ? "failed" : "connecting";
+  const pc = VOICE.peers[id], p = VOICE.people[id] || {};
+  const s = pc && (pc.connectionState || pc.iceConnectionState);
+  if (s === "connected" || s === "completed") return pc._via === "relay" ? "relay" : "ok";
+  return (p.fails || 0) >= 2 || s === "failed" ? "failed" : "connecting";
 }
 function renderVoice(levelsOnly){
   const btn = $("#voiceBtn"), mic = $("#micBtn");
@@ -2462,11 +2497,12 @@ function renderVoice(levelsOnly){
   }
   const row = (id, name, muted, st) => { const m = VOICE.meters[id], on = m && m.on;
     return '<div class="vp-row"><span class="vp-dot' + (on ? " on" : "") + '" data-vid="' + esc(id) + '"></span><span class="vp-nm">' + esc(name) + '</span>' +
-      (muted ? '<span title="Muted">🔇</span>' : "") + (st === "ok" || st === "me" ? "" : st === "failed" ? '<span class="small" style="color:#f87171" title="Your networks could not connect directly">can\'t connect</span>' : '<span class="small muted">connecting…</span>') + '</div>'; };
+      (muted ? '<span title="Muted">🔇</span>' : "") + (st === "ok" || st === "me" ? "" : st === "relay" ? '<span class="small muted" title="Connected through the relay server">relay</span>' : st === "failed" ? '<span class="small" style="color:#f87171" title="Your networks block a direct link and the relay did not work">can\'t connect — retrying</span>' : '<span class="small muted">connecting…</span>') + '</div>'; };
   box.innerHTML = '<div class="vp-head"><b>🎙 Voice chat</b><button class="iconbtn" data-action="voice-close" aria-label="Close">✕</button></div>' +
     '<div class="vp-list">' + row(me.id, voiceName() + " (you)", VOICE.muted, "me") +
     Object.keys(VOICE.people).sort((a, b) => VOICE.people[a].name.localeCompare(VOICE.people[b].name)).map(id => row(id, VOICE.people[id].name, VOICE.people[id].muted, voiceState(id))).join("") + '</div>' +
     (Object.keys(VOICE.people).length ? "" : '<p class="small muted" style="margin:6px 0">Nobody else is in voice yet. Tell your friends to press 🎙.</p>') +
+    (Object.keys(VOICE.people).some(id => voiceState(id) === "failed") ? '<p class="small" style="color:#fbbf24;margin:6px 0">Some phones can\'t reach each other (mobile networks often block this). ' + (isHost() ? 'Add a free relay in <a href="#" data-goto="settings">Settings → Voice relay</a>.' : 'Ask the master to add a voice relay in Settings.') + '</p>' : "") +
     '<div class="row" style="margin-top:10px;flex-wrap:nowrap"><button class="btn" style="flex:1" data-action="voice-mute">' + (VOICE.muted ? "🎤 Unmute" : "🔇 Mute") + '</button><button class="btn danger" style="flex:1" data-action="voice-leave">📴 Turn voice off</button></div>';
 }
 window.addEventListener("pagehide", () => { if (VOICE.on) pub("vc/all", { t: "bye", id: me.id }); });
@@ -3171,6 +3207,12 @@ function renderSettings(){
       '<button class="btn" data-action="backup">💾 Download backup</button>' +
       '<label class="btn" style="position:relative">📂 Restore backup<input type="file" accept=".json,application/json" id="restoreFile" class="vh"></label>' +
     '</div></div>' +
+    '<div class="panel"><h3>🎙 Voice relay (TURN)</h3><p class="small muted" style="margin-top:0">If voice stays on "connecting…", the phones\' networks are blocking a direct link (very common on mobile data). A relay server passes the sound through instead. ' +
+      'Make a <b>free</b> account at <a href="https://www.metered.ca/stun-turn" target="_blank" rel="noopener">metered.ca</a> or <a href="https://www.expressturn.com" target="_blank" rel="noopener">expressturn.com</a>, copy the TURN address, username and password here. Everyone in the room uses it automatically (rejoin voice after saving).</p>' +
+      '<div class="grid g3"><label class="field">TURN address(es)<input data-turn="urls" placeholder="turn:example.com:3478" value="' + esc((s.turn && s.turn.urls) || "") + '"></label>' +
+      '<label class="field">Username<input data-turn="user" autocomplete="off" value="' + esc((s.turn && s.turn.user) || "") + '"></label>' +
+      '<label class="field">Password<input data-turn="pass" type="password" autocomplete="off" value="' + esc((s.turn && s.turn.pass) || "") + '"></label></div>' +
+      '<p class="small muted" style="margin:8px 0 0">' + (s.turn && s.turn.urls ? "✅ Your relay is set." : "Now using a free public relay (it can be slow or busy).") + ' Separate several addresses with commas.</p></div>' +
     '<div class="panel"><h3>Photos</h3><p class="small muted" style="margin-top:0">' + Object.keys(customPhotos).length + ' photos added by you · ' + Object.values(wikiCache).filter(w => w.u).length + ' found on Wikipedia.</p><div class="row">' +
       '<button class="btn" data-action="photos-retry">🔄 Search missing photos again</button>' +
     '</div></div>' +
@@ -3499,6 +3541,11 @@ document.addEventListener("change", e => {
     if (k === "timer"){ if (!v) state.timer = null; else if (state.current && state.current.teamId && !state.timer) timerStartFull(); }
     persist();
     if (k === "squadMax" && state.teams.some(t => teamCount(t) > v)) toast("Some teams already have more than " + v + " players", true);
+  }
+  if (el.dataset.turn){
+    const t = Object.assign({ urls: "", user: "", pass: "" }, state.settings.turn || {});
+    t[el.dataset.turn] = el.value.trim();
+    state.settings.turn = t.urls ? t : null; persist(); toast(t.urls ? "Voice relay saved — rejoin voice to use it" : "Voice relay removed"); renderSettings(); return;
   }
   if (el.dataset.setpos){ const v = Math.max(0, Math.round(+el.value || 0)); state.settings.posMax[el.dataset.setpos] = v; persist(); }
 });
